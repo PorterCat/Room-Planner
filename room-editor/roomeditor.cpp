@@ -5,6 +5,8 @@
 
 #include "mainwindow.h"
 #include "room-editor/InteractivePoint/gridpoint.h"
+#include "tools/dragtool.h"
+#include "tools/walltool.h"
 
 RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindow* mainWindow)
 	: QWidget(parent), gridWidth_(gridWidth), gridHeight_(gridHeight), mainWindow_(mainWindow)
@@ -27,12 +29,12 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindo
 	setLayout(new QVBoxLayout);
 	layout()->addWidget(view);
 
-	zoomLabel = new PopupLabel(this, 5000);
+	zoomLabel = new PopupLabel(this, 1000);
 	zoomLabel->setStyleSheet("background-color: rgba(0, 0, 0, 128); color: white; padding: 5px;");
 	zoomLabel->setAlignment(Qt::AlignCenter);
 	zoomLabel->hide();
 
-	infoLabel = new PopupLabel(this, 5000);
+	infoLabel = new PopupLabel(this, 1000);
 	infoLabel->setStyleSheet("background-color: rgba(0, 0, 0, 128); color: blue; padding: 5px;");
 	infoLabel->setAlignment(Qt::AlignBottom);
 	infoLabel->hide();
@@ -42,8 +44,15 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindo
 	connect(mainWindow_, &MainWindow::currentToolChanged, this, &RoomEditor::onCurrentToolChanged);
 
 	currentTool_ = mainWindow->currentTool();
-
+	if(dynamic_cast<DragTool*>(currentTool_))
+		setDragMode(true);
 	this->drawGrid();
+}
+
+void RoomEditor::setDragMode(bool choice)
+{
+	if(choice) view->setDragMode(QGraphicsView::ScrollHandDrag);
+	else view->setDragMode(QGraphicsView::NoDrag);
 }
 
 void RoomEditor::onZoomLabelClicked()
@@ -97,17 +106,17 @@ void RoomEditor::drawGrid()
 
 void RoomEditor::mouseMoveEvent(QMouseEvent* event)
 {
-	currentTool_->mouseMoveEvent(event);
+	currentTool_->mouseMoveEvent(event, this);
 }
 
 void RoomEditor::mousePressEvent(QMouseEvent* event)
 {
-	currentTool_->mousePressEvent(event);
+	currentTool_->mousePressEvent(event, this);
 }
 
 void RoomEditor::mouseReleaseEvent(QMouseEvent* event)
 {
-	currentTool_->mouseReleaseEvent(event);
+	currentTool_->mouseReleaseEvent(event, this);
 }
 
 void RoomEditor::setZoomLevel(int zoomPercentage)
@@ -132,9 +141,19 @@ void RoomEditor::onZoomChanged() { showZoomLevel(); }
 void RoomEditor::onCurrentToolChanged(ITool* newTool)
 {
 	currentTool_ = newTool;
-	infoLabel->setText("New tool!");
+
+	if(dynamic_cast<WallTool*>(newTool))
+	{
+		infoLabel->setText("Стены");
+	}
+	else if(dynamic_cast<DragTool*>(newTool))
+	{
+		infoLabel->setText("Перетаскивание");
+		setDragMode(true);
+	}
+
 	infoLabel->adjustSize();
-	infoLabel->move(10, 10);
+	infoLabel->move(10, 50);
 	infoLabel->showWithTimer();
 }
 

@@ -2,6 +2,7 @@
 #define WALLTOOL_H
 
 #include "itool.h"
+#include "room-editor/roomeditor.h"
 
 #include <QGraphicsView>
 
@@ -10,9 +11,9 @@ class WallTool : public ITool
   public:
 	WallTool();
 	~WallTool();
-	void mousePressEvent(QMouseEvent *event) override;
-	void mouseMoveEvent(QMouseEvent *event) override;
-	void mouseReleaseEvent(QMouseEvent *event) override;
+	void mousePressEvent(QMouseEvent* event, RoomEditor* sender) override;
+	void mouseMoveEvent(QMouseEvent* event, RoomEditor* sender) override;
+	void mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender) override;
 
   private:
 	QGraphicsScene *scene_;

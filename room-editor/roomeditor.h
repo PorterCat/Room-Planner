@@ -26,6 +26,7 @@ class RoomEditor : public QWidget
 	~RoomEditor();
 
 	void setCurrentTool(ITool* tool) {currentTool_ = tool; }
+	void setDragMode(bool);
 
   protected:
 	void mouseMoveEvent(QMouseEvent* event) override;

@@ -42,15 +42,26 @@ void MainWindow::setCurrentTool(ITool* tool)
 	emit currentToolChanged(currentTool_);
 }
 
-// Turn them into list
+// Turn tools into list
 
-void MainWindow::on_actionWallTool_triggered()
+void MainWindow::on_actionDragTool_toggled(bool arg1)
 {
-	setCurrentTool(new WallTool());
+	if(arg1)
+	{
+		setCurrentTool(new DragTool());
+		return;
+	}
+	QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+	for (RoomEditor* editor : roomEditors)
+		editor->setDragMode(false);
 }
 
-void MainWindow::on_actionDragTool_triggered()
+void MainWindow::on_actionWallTool_toggled(bool arg1)
 {
-	setCurrentTool(new DragTool());
+	if(arg1)
+	{
+		setCurrentTool(new WallTool());
+		return;
+	}
 }
 

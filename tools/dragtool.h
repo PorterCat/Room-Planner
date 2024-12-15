@@ -2,15 +2,18 @@
 #define DRAGTOOL_H
 
 #include "itool.h"
+#include "room-editor/roomeditor.h"
+
+// Why I need this class at all?
 
 class DragTool : public ITool
 {
   public:
 	DragTool();
 	~DragTool();
-	void mousePressEvent(QMouseEvent *event) override;
-	void mouseMoveEvent(QMouseEvent *event) override;
-	void mouseReleaseEvent(QMouseEvent *event) override;
+	void mousePressEvent(QMouseEvent* event, RoomEditor* sender) override;
+	void mouseMoveEvent(QMouseEvent* event, RoomEditor* sender) override;
+	void mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender) override;
 };
 
 #endif // DRAGTOOL_H

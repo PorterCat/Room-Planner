@@ -4,17 +4,7 @@ DragTool::DragTool() {}
 
 DragTool::~DragTool() {}
 
-void DragTool::mouseMoveEvent(QMouseEvent* event)
-{
-
-}
-
-void DragTool::mousePressEvent(QMouseEvent* event)
-{
-
-}
-
-void DragTool::mouseReleaseEvent(QMouseEvent* event)
-{
-
-}
+// Smelly
+void DragTool::mouseMoveEvent(QMouseEvent* event, RoomEditor* sender) {}
+void DragTool::mousePressEvent(QMouseEvent* event, RoomEditor* sender) {}
+void DragTool::mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender) {}

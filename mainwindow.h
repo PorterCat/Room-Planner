@@ -30,9 +30,9 @@ class MainWindow : public QMainWindow
 
 	void on_actionNew_Project_triggered();
 
-	void on_actionWallTool_triggered();
+	void on_actionDragTool_toggled(bool arg1);
 
-	void on_actionDragTool_triggered();
+	void on_actionWallTool_toggled(bool arg1);
 
   private:
 	Ui::MainWindow *ui;

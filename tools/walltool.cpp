@@ -2,7 +2,7 @@
 
 WallTool::WallTool() {}
 
-void WallTool::mouseMoveEvent(QMouseEvent* event)
+void WallTool::mouseMoveEvent(QMouseEvent* event, RoomEditor* sender)
 {
 	// QPointF scenePos = scene_->views().first()->mapToScene(event->pos());
 
@@ -16,7 +16,7 @@ void WallTool::mouseMoveEvent(QMouseEvent* event)
 	// previewWall_->setPos(scenePos.x() - 25, scenePos.y() - 25);
 }
 
-void WallTool::mousePressEvent(QMouseEvent* event)
+void WallTool::mousePressEvent(QMouseEvent* event, RoomEditor* sender)
 {
 	// if (event->button() == Qt::LeftButton) {
 	// 	QPointF scenePos = scene_->views().first()->mapToScene(event->pos());
@@ -36,7 +36,7 @@ void WallTool::mousePressEvent(QMouseEvent* event)
 	// }
 }
 
-void WallTool::mouseReleaseEvent(QMouseEvent* event)
+void WallTool::mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender)
 {
 
 }
