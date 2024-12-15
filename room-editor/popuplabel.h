@@ -9,7 +9,7 @@ class PopupLabel : public QLabel
 	Q_OBJECT
 
   public:
-	explicit PopupLabel(QWidget *parent = nullptr);
+	explicit PopupLabel(QWidget *parent = nullptr, int interval = 2000);
 
   signals:
 	void doubleClicked();
@@ -32,7 +32,7 @@ class PopupLabel : public QLabel
 	void showWithTimer()
 	{
 		this->show();
-		timer->start(2000);
+		timer->start();
 	}
 
   private:

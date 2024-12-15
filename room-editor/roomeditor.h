@@ -11,6 +11,7 @@
 #include <QTransform>
 #include <QInputDialog>
 
+#include "mainwindow.h"
 #include "popuplabel.h"
 #include "zoomablegraphicsview.h"
 #include "tools/itool.h"
@@ -20,11 +21,16 @@ class RoomEditor : public QWidget
 	Q_OBJECT
 
   public:
-	explicit RoomEditor(int gridWidth, int gridHeight, QWidget *parent = nullptr);
+	explicit RoomEditor(int gridWidth, int gridHeight, QWidget *parent = nullptr, MainWindow* mainWindow = nullptr);
 	void setGridSize(int width, int height);
 	~RoomEditor();
 
 	void setCurrentTool(ITool* tool) {currentTool_ = tool; }
+
+  protected:
+	void mouseMoveEvent(QMouseEvent* event) override;
+	void mouseReleaseEvent(QMouseEvent* event) override;
+	void mousePressEvent(QMouseEvent* event) override;
 
   private:
 	QGraphicsScene *scene;
@@ -36,14 +42,18 @@ class RoomEditor : public QWidget
 	void drawGrid();
 
 	PopupLabel *zoomLabel;
+	PopupLabel *infoLabel;
 	PopupLabel *errorLabel;
 
 	void showZoomLevel();
 	void setZoomLevel(int zoomPercentage);
 
+	MainWindow* mainWindow_;
+
   private slots:
 	void onZoomChanged();
 	void onZoomLabelClicked();
+	void onCurrentToolChanged(ITool* newTool);
 };
 
 #endif // ROOMEDITOR_H

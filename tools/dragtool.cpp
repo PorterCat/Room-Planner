@@ -1,8 +1,20 @@
 #include "dragtool.h"
 
-// DragTool::DragTool() {}
+DragTool::DragTool() {}
 
-void DragTool::prepareScene(RoomEditor* scene, ITool* tool)
+DragTool::~DragTool() {}
+
+void DragTool::mouseMoveEvent(QMouseEvent* event)
+{
+
+}
+
+void DragTool::mousePressEvent(QMouseEvent* event)
+{
+
+}
+
+void DragTool::mouseReleaseEvent(QMouseEvent* event)
 {
 
 }

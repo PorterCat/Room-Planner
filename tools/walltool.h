@@ -3,7 +3,7 @@
 
 #include "itool.h"
 
-#include <QGraphicsScene>
+#include <QGraphicsView>
 
 class WallTool : public ITool
 {
@@ -15,12 +15,12 @@ class WallTool : public ITool
 	void mouseReleaseEvent(QMouseEvent *event) override;
 
   private:
-	// QGraphicsScene *scene;
-	// QGraphicsLineItem *previewWall;
-	// QPointF startPoint;
-	bool isDrawingWall_;
+	QGraphicsScene *scene_;
+	QGraphicsRectItem *previewWall_;
+	//QPointF startPoint;
+	//bool isDrawingWall_;
 
-	// QPointF snapToGrid(const QPointF &point);
+	//QPointF snapToGrid(const QPointF &point);
 };
 
 #endif // WALLTOOL_H

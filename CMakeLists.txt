@@ -32,8 +32,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         tools/walltool.h tools/walltool.cpp
         room-editor/WallPoint/Direction.h
         room-editor/Grid.h
-        room-editor/InteractivePoint/interactivepoint.h room-editor/InteractivePoint/interactivepoint.cpp
+
         tools/dragtool.h tools/dragtool.cpp
+        room-editor/InteractivePoint/gridpoint.h room-editor/InteractivePoint/gridpoint.cpp
+        room-editor/SceneObjects/roomeditorobject.h
+        room-editor/SceneObjects/rewall.h room-editor/SceneObjects/rewall.cpp
+        room-editor/SceneObjects/rewindow.h room-editor/SceneObjects/rewindow.cpp
+        room-editor/SceneObjects/redoor.h room-editor/SceneObjects/redoor.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

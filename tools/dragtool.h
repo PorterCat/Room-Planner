@@ -5,11 +5,12 @@
 
 class DragTool : public ITool
 {
-	friend RoomEditor;
   public:
 	DragTool();
 	~DragTool();
-	void prepareScene(RoomEditor* scene, ITool* tool) override;
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
 };
 
 #endif // DRAGTOOL_H

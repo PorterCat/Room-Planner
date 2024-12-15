@@ -19,6 +19,12 @@ class MainWindow : public QMainWindow
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
+	void setCurrentTool(ITool* tool);
+	ITool* currentTool() const { return currentTool_; }
+
+  signals:
+	void currentToolChanged(ITool* newTool);
+
   private slots:
 	void on_tabWidget_tabCloseRequested(int index);
 
@@ -26,8 +32,10 @@ class MainWindow : public QMainWindow
 
 	void on_actionWallTool_triggered();
 
+	void on_actionDragTool_triggered();
+
   private:
 	Ui::MainWindow *ui;
-	ITool* _currentTool;
+	ITool* currentTool_;
 };
 #endif // MAINWINDOW_H

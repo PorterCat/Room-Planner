@@ -15,11 +15,25 @@
 class ZoomableGraphicsView : public QGraphicsView
 {
 	Q_OBJECT
+
   public:
-	ZoomableGraphicsView(QGraphicsScene *scene, QWidget *parent = nullptr) : QGraphicsView(scene, parent) {}
+	ZoomableGraphicsView(QGraphicsScene* scene, QWidget* parent = nullptr)
+		: QGraphicsView(scene, parent), currentScale(1.0) // Инициализируем масштаб как 100%
+	{
+	}
+
+	void setZoomLevel(double scaleFactor)
+	{
+		if (scaleFactor > maxScale) {
+			scaleFactor = maxScale;
+		}
+		currentScale = scaleFactor;
+		setTransform(QTransform::fromScale(currentScale, currentScale));
+		emit zoomChanged();
+	}
 
   protected:
-	void wheelEvent(QWheelEvent *event) override
+	void wheelEvent(QWheelEvent* event) override
 	{
 		QPoint numDegrees = event->angleDelta() / 8;
 		if (!numDegrees.isNull()) {
@@ -29,16 +43,25 @@ class ZoomableGraphicsView : public QGraphicsView
 			} else if (numSteps.y() < 0) {
 				scale(0.9, 0.9);
 			}
+
+			currentScale *= (numSteps.y() > 0) ? 1.1 : 0.9;
+
+			if (currentScale > maxScale) {
+				currentScale = maxScale;
+				setTransform(QTransform::fromScale(maxScale, maxScale));
+			}
+
 			emit zoomChanged();
 		}
 		event->accept();
 	}
 
-	static constexpr double DotSize = 25.0 / 3.0;
-
-  public:
   signals:
 	void zoomChanged();
+
+  private:
+	double currentScale;
+	static constexpr double maxScale = 5.0;
 };
 
 #endif // ZOOMABLEGRAPHICSVIEW_H
