@@ -87,6 +87,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionWallTool"/>
+   <addaction name="actionDragTool"/>
   </widget>
   <action name="actionNew_Project">
    <property name="checkable">
@@ -97,7 +99,7 @@
      <normaloff>:/images/images/add-file-64.png</normaloff>:/images/images/add-file-64.png</iconset>
    </property>
    <property name="text">
-    <string>New Project</string>
+    <string>&amp;New Project</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -109,7 +111,31 @@
      <normaloff>:/images/images/file-64.png</normaloff>:/images/images/file-64.png</iconset>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string>&amp;Open</string>
+   </property>
+  </action>
+  <action name="actionWallTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/images/bold-64.png</normaloff>:/images/images/bold-64.png</iconset>
+   </property>
+   <property name="text">
+    <string>WallTool</string>
+   </property>
+  </action>
+  <action name="actionDragTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/images/direct-selection.png</normaloff>:/images/images/direct-selection.png</iconset>
+   </property>
+   <property name="text">
+    <string>DragTool</string>
    </property>
   </action>
  </widget>

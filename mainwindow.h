@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "tools/itool.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -23,7 +24,10 @@ class MainWindow : public QMainWindow
 
 	void on_actionNew_Project_triggered();
 
+	void on_actionWallTool_triggered();
+
   private:
 	Ui::MainWindow *ui;
+	ITool* _currentTool;
 };
 #endif // MAINWINDOW_H

@@ -13,6 +13,7 @@
 
 #include "popuplabel.h"
 #include "zoomablegraphicsview.h"
+#include "tools/itool.h"
 
 class RoomEditor : public QWidget
 {
@@ -23,15 +24,19 @@ class RoomEditor : public QWidget
 	void setGridSize(int width, int height);
 	~RoomEditor();
 
+	void setCurrentTool(ITool* tool) {currentTool_ = tool; }
+
   private:
 	QGraphicsScene *scene;
 	ZoomableGraphicsView *view;
 	int gridWidth_;
 	int gridHeight_;
+	ITool *currentTool_;
+
 	void drawGrid();
 
 	PopupLabel *zoomLabel;
-	// PopupLabel *errorLabel;
+	PopupLabel *errorLabel;
 
 	void showZoomLevel();
 	void setZoomLevel(int zoomPercentage);

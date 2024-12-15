@@ -33,6 +33,9 @@ class ZoomableGraphicsView : public QGraphicsView
 		}
 		event->accept();
 	}
+
+	static constexpr double DotSize = 25.0 / 3.0;
+
   public:
   signals:
 	void zoomChanged();

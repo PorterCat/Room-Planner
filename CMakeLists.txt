@@ -31,6 +31,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         tools/itool.h
         tools/walltool.h tools/walltool.cpp
         room-editor/WallPoint/Direction.h
+        room-editor/Grid.h
+        room-editor/InteractivePoint/interactivepoint.h room-editor/InteractivePoint/interactivepoint.cpp
+        tools/dragtool.h tools/dragtool.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -77,3 +80,5 @@ install(TARGETS Room-Planner
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(Room-Planner)
 endif()
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

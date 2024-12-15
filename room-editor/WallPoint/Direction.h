@@ -6,50 +6,53 @@
 #include <QException>
 #include <qvectornd.h>
 
-namespace WallPoint
+namespace Walls
 {
-	enum Direction : uint8_t
-	{
-		None        = 0,
-		Up          = 1 << 0,
-		UpRight     = 1 << 1,
-		Right       = 1 << 2,
-		BottomRight = 1 << 3,
-		Bottom      = 1 << 4,
-		BottomLeft  = 1 << 5,
-		Left        = 1 << 6,
-		UpLeft      = 1 << 7,
-	};
+	using WallPointDirection_t = uint8_t;
 
-	Direction OppositeDirection(Direction dir)
+	// Ugly way to use bit flags and avoid warnings
+	namespace WallPointDirection
+	{
+		constexpr WallPointDirection_t None        = 0;
+		constexpr WallPointDirection_t Up          = 1 << 0;
+		constexpr WallPointDirection_t UpRight     = 1 << 1;
+		constexpr WallPointDirection_t Right       = 1 << 2;
+		constexpr WallPointDirection_t BottomRight = 1 << 3;
+		constexpr WallPointDirection_t Bottom      = 1 << 4;
+		constexpr WallPointDirection_t BottomLeft  = 1 << 5;
+		constexpr WallPointDirection_t Left        = 1 << 6;
+		constexpr WallPointDirection_t UpLeft      = 1 << 7;
+	}
+
+	WallPointDirection_t OppositeDirection(WallPointDirection_t dir)
 	{
 		switch(dir)
 		{
-			case Direction::Up:          return Direction::Bottom;
-			case Direction::UpRight:     return Direction::BottomLeft;
-			case Direction::Right:       return Direction::Left;
-			case Direction::BottomRight: return Direction::UpLeft;
-			case Direction::Bottom:      return Direction::Up;
-			case Direction::BottomLeft:  return Direction::UpRight;
-			case Direction::Left:        return Direction::Right;
-			case Direction::UpLeft:      return Direction::BottomRight;
+			case WallPointDirection::Up:          return WallPointDirection::Bottom;
+			case WallPointDirection::UpRight:     return WallPointDirection::BottomLeft;
+			case WallPointDirection::Right:       return WallPointDirection::Left;
+			case WallPointDirection::BottomRight: return WallPointDirection::UpLeft;
+			case WallPointDirection::Bottom:      return WallPointDirection::Up;
+			case WallPointDirection::BottomLeft:  return WallPointDirection::UpRight;
+			case WallPointDirection::Left:        return WallPointDirection::Right;
+			case WallPointDirection::UpLeft:      return WallPointDirection::BottomRight;
 			default: throw std::runtime_error("Direction was not provided");;
 		}
 	}
 
-	QVector2D GetOffsetToDirection(Direction dir)
+	QVector2D GetOffsetToDirection(WallPointDirection_t dir)
 	{
 		switch(dir)
 		{
-		case Direction::Up:          return QVector2D(-1.0f,  0.0f);
-		case Direction::UpRight:     return QVector2D(-1.0f,  1.0f);
-		case Direction::Right:       return QVector2D( 0.0f,  1.0f);
-		case Direction::BottomRight: return QVector2D( 1.0f,  1.0f);
-		case Direction::Bottom:      return QVector2D( 1.0f,  0.0f);
-		case Direction::BottomLeft:  return QVector2D( 1.0f, -1.0f);
-		case Direction::Left:        return QVector2D( 0.0f, -1.0f);
-		case Direction::UpLeft:      return QVector2D(-1.0f, -1.0f);
-		default: throw std::runtime_error("Direction was not provided");;
+			case WallPointDirection::Up:          return QVector2D(-1.0f,  0.0f);
+			case WallPointDirection::UpRight:     return QVector2D(-1.0f,  1.0f);
+			case WallPointDirection::Right:       return QVector2D( 0.0f,  1.0f);
+			case WallPointDirection::BottomRight: return QVector2D( 1.0f,  1.0f);
+			case WallPointDirection::Bottom:      return QVector2D( 1.0f,  0.0f);
+			case WallPointDirection::BottomLeft:  return QVector2D( 1.0f, -1.0f);
+			case WallPointDirection::Left:        return QVector2D( 0.0f, -1.0f);
+			case WallPointDirection::UpLeft:      return QVector2D(-1.0f, -1.0f);
+			default: throw std::runtime_error("Direction was not provided");;
 		}
 	}
 }
