@@ -39,6 +39,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         room-editor/SceneObjects/rewall.h room-editor/SceneObjects/rewall.cpp
         room-editor/SceneObjects/rewindow.h room-editor/SceneObjects/rewindow.cpp
         room-editor/SceneObjects/redoor.h room-editor/SceneObjects/redoor.cpp
+        widgets/newproject_inputdialog.h widgets/newproject_inputdialog.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

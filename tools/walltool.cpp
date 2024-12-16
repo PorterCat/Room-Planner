@@ -43,7 +43,6 @@ void WallTool::mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender)
 
 WallTool::~WallTool()
 {
-	if (previewWall_) {
+	if (previewWall_)
 		delete previewWall_;
-	}
 }

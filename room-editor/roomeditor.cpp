@@ -21,7 +21,6 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindo
 
 	view->setRenderHint(QPainter::Antialiasing);
 	view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-	// view->setDragMode(QGraphicsView::ScrollHandDrag); TODO: make it with DragTool
 
 	view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -47,21 +46,6 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindo
 	if(dynamic_cast<DragTool*>(currentTool_))
 		setDragMode(true);
 	this->drawGrid();
-}
-
-void RoomEditor::setDragMode(bool choice)
-{
-	if(choice) view->setDragMode(QGraphicsView::ScrollHandDrag);
-	else view->setDragMode(QGraphicsView::NoDrag);
-}
-
-void RoomEditor::onZoomLabelClicked()
-{
-	bool ok;
-	int newZoom = QInputDialog::getInt(this, "Set Zoom Level", "Enter zoom percentage:", 100, 10, 500, 10, &ok);
-	if (ok) {
-		setZoomLevel(newZoom);
-	}
 }
 
 constexpr double LineSize = 25.0;
@@ -104,20 +88,7 @@ void RoomEditor::drawGrid()
 	}
 }
 
-void RoomEditor::mouseMoveEvent(QMouseEvent* event)
-{
-	currentTool_->mouseMoveEvent(event, this);
-}
-
-void RoomEditor::mousePressEvent(QMouseEvent* event)
-{
-	currentTool_->mousePressEvent(event, this);
-}
-
-void RoomEditor::mouseReleaseEvent(QMouseEvent* event)
-{
-	currentTool_->mouseReleaseEvent(event, this);
-}
+#pragma region ZoomView
 
 void RoomEditor::setZoomLevel(int zoomPercentage)
 {
@@ -136,17 +107,42 @@ void RoomEditor::showZoomLevel()
 	zoomLabel->showWithTimer();
 }
 
+void RoomEditor::onZoomLabelClicked()
+{
+	bool ok;
+	int newZoom = QInputDialog::getInt(this, "Set Zoom Level", "Enter zoom percentage:", 100, 10, 500, 10, &ok);
+
+	if (ok)
+		setZoomLevel(newZoom);
+}
+
 void RoomEditor::onZoomChanged() { showZoomLevel(); }
+
+#pragma endregion
+
+#pragma region Tools
+
+void RoomEditor::mouseMoveEvent(QMouseEvent* event) { currentTool_->mouseMoveEvent(event, this); }
+
+void RoomEditor::mousePressEvent(QMouseEvent* event) { currentTool_->mousePressEvent(event, this); }
+
+void RoomEditor::mouseReleaseEvent(QMouseEvent* event) { currentTool_->mouseReleaseEvent(event, this); }
+
+void RoomEditor::setDragMode(bool choice)
+{
+	if (choice) view->setDragMode(QGraphicsView::ScrollHandDrag);
+	else view->setDragMode(QGraphicsView::NoDrag);
+}
 
 void RoomEditor::onCurrentToolChanged(ITool* newTool)
 {
 	currentTool_ = newTool;
 
-	if(dynamic_cast<WallTool*>(newTool))
+	if (dynamic_cast<WallTool*>(newTool))
 	{
 		infoLabel->setText("Стены");
 	}
-	else if(dynamic_cast<DragTool*>(newTool))
+	else if (dynamic_cast<DragTool*>(newTool))
 	{
 		infoLabel->setText("Перетаскивание");
 		setDragMode(true);
@@ -156,5 +152,7 @@ void RoomEditor::onCurrentToolChanged(ITool* newTool)
 	infoLabel->move(10, 50);
 	infoLabel->showWithTimer();
 }
+
+#pragma endregion
 
 RoomEditor::~RoomEditor() {}

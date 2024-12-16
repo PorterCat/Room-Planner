@@ -34,7 +34,11 @@ class MainWindow : public QMainWindow
 
 	void on_actionWallTool_toggled(bool arg1);
 
-  private:
+    void on_actionClose_Tab_triggered();
+
+    void on_actionClose_All_triggered();
+
+private:
 	Ui::MainWindow *ui;
 	ITool* currentTool_;
 };

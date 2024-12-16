@@ -5,6 +5,9 @@
 #include "room-editor/roomeditor.h"
 
 #include <QActionGroup>
+#include <QMessageBox>
+
+#include "widgets/newproject_inputdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent), ui(new Ui::MainWindow)
@@ -16,10 +19,19 @@ MainWindow::MainWindow(QWidget *parent)
 	actionGroup->setExclusive(true);
 	actionGroup->addAction(ui->actionWallTool);
 	actionGroup->addAction(ui->actionDragTool);
+    actionGroup->addAction(ui->actionCursorTool);
 
 	ui->actionDragTool->setChecked(true);
 	setCurrentTool(new DragTool());
-	// add there brush and other things
+
+    // add there brush and other things
+
+    ui->generalTools->setStyleSheet(
+        "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }"
+    );
+    ui->buildTools->setStyleSheet(
+        "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }"
+    );
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -31,9 +43,13 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_actionNew_Project_triggered()
 {
-	RoomEditor* tab = new RoomEditor(32, 32, ui->tabWidget, this);
-	tab->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding));
-	ui->tabWidget->setCurrentIndex(ui->tabWidget->addTab(tab, "Untitled"));
+	NewProjectInputDialog dialog(this);
+	if (dialog.exec() == QDialog::Accepted) 
+	{
+		RoomEditor* tab = new RoomEditor(dialog.getWidthValue(), dialog.getLengthValue(), ui->tabWidget, this);
+		tab->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding));
+		ui->tabWidget->setCurrentIndex(ui->tabWidget->addTab(tab, dialog.getFileNameValue()));
+	}
 }
 
 void MainWindow::setCurrentTool(ITool* tool)
@@ -63,5 +79,33 @@ void MainWindow::on_actionWallTool_toggled(bool arg1)
 		setCurrentTool(new WallTool());
 		return;
 	}
+}
+
+
+void MainWindow::on_actionClose_Tab_triggered()
+{
+    //TO DO: add there maybesave? options
+    ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabWidget->currentWidget()));
+}
+
+
+void MainWindow::on_actionClose_All_triggered()
+{
+    for (int i = 0; i < ui->tabWidget->count(); ++i)
+    {
+        QWidget* currentWidget = ui->tabWidget->widget(i);
+
+        if (currentWidget)
+        {
+            QMessageBox::StandardButton reply = QMessageBox::warning(this, tr("Unsaved Changes"),
+                                            tr("You have unsaved changes. Do you want to save them?"),
+                                            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+            if (reply == QMessageBox::Save) {
+                //saveAsTriggered;
+            }
+            else if (reply == QMessageBox::Cancel)
+                return;
+        }
+    }
 }
 

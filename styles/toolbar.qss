@@ -1,0 +1,4 @@
+QToolButton:checked {
+    background-color: lightgray;
+    border: 1px solid gray;
+}
