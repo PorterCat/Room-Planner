@@ -13,9 +13,11 @@
 
 #include "mainwindow.h"
 #include "popuplabel.h"
+#include "room-editor/actiongraphicsscene.h"
 #include "zoomablegraphicsview.h"
 #include "tools/itool.h"
 #include "interactive-point/interactinggrid.h"
+#include "room-editor//scene-objects/roomeditorobject.h"
 
 class RoomEditor : public QWidget
 {
@@ -35,7 +37,7 @@ class RoomEditor : public QWidget
 	void writeInfoLabel(const QString);
 	void writeErrorLabel(const QString);
 
-	QGraphicsScene* getScene() { return scene_; }
+    ActionGraphicsScene* getScene() { return scene_; }
 	ZoomableGraphicsView* getView() { return view_; }
 
   protected:
@@ -44,7 +46,7 @@ class RoomEditor : public QWidget
 	void mousePressEvent(QMouseEvent* event) override;
 
   private:
-	QGraphicsScene *scene_;
+    ActionGraphicsScene *scene_;
 	ZoomableGraphicsView *view_;
 	ITool *currentTool_;
 
@@ -61,7 +63,8 @@ class RoomEditor : public QWidget
 	MainWindow* mainWindow_;
 
 	InteractingGrid* interactingGrid_;
-	bool isPointsInteracting_;
+
+	QVector<RoomEditorObject*> roomEditorObjects;
 
   private slots:
 	void onZoomChanged();

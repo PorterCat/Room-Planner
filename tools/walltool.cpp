@@ -36,9 +36,10 @@ void WallTool::mouseMoveEvent(QMouseEvent* event, QWidget* sender)
 				view->scene()->addItem(previewWall_);
 
 				qreal distance = GridPoint::calculateDistance(startPoint_, gridPoint);
-				distanceText_ = new QGraphicsTextItem(QString::number(distance, 'f', 2) + " m");
-				distanceText_->setDefaultTextColor(Qt::gray);
+				distanceText_ = new QGraphicsTextItem(QString::number(distance/100, 'f', 2) + " m");
+				distanceText_->setDefaultTextColor(Qt::black);
 				distanceText_->setPos(gridPoint->getX(), gridPoint->getY() - 20);
+				distanceText_->setZValue(120);
 				view->scene()->addItem(distanceText_);
 			}
 		}
@@ -54,9 +55,8 @@ void WallTool::mousePressEvent(QMouseEvent* event, QWidget* sender)
 		{
 			if (isDrawingWall_ && startPoint_ != nullptr)
 			{
-				previewWall_ = new QGraphicsLineItem(startPoint_->getX(), startPoint_->getY(), gridPoint->getX(), gridPoint->getY());
-				previewWall_->setPen(QPen(Qt::gray, 5));
-				view->scene()->addItem(previewWall_);
+				startPoint_->hoverMode(true);
+				startPoint_->transparentIt();
 				isDrawingWall_ = false;
 			}
 			else

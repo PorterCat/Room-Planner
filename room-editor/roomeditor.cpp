@@ -16,7 +16,7 @@ constexpr qreal DotSize = LineSize / 2.0;
 constexpr int LineBrightness = 64;
 
 RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindow* mainWindow)
-	: QWidget(parent), scene_(new QGraphicsScene(this)), mainWindow_(mainWindow)
+    : QWidget(parent), scene_(new ActionGraphicsScene(this)), mainWindow_(mainWindow)
 {
 	scene_->setBackgroundBrush(Qt::white);
 	// scene->setSceneRect(0, 0, 1000, 1000); For more space and better dragging mode to do
@@ -132,7 +132,6 @@ void RoomEditor::setDragMode(bool choice)
 
 void RoomEditor::setSelectPointsMode(bool choice) 
 { 
-	isPointsInteracting_ = choice; 
 	interactingGrid_->setInteractive(choice);
 }
 

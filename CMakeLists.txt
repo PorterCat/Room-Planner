@@ -41,6 +41,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         widgets/newproject_inputdialog.h widgets/newproject_inputdialog.cpp
         widgets/sceneobjectsmenu.h widgets/sceneobjectsmenu.cpp widgets/sceneobjectsmenu.ui
+        room-editor/actiongraphicsscene.h room-editor/actiongraphicsscene.cpp
+        room-editor/commands/graphicsscenecommand.h
+        room-editor/commands/additemcommand.h room-editor/commands/additemcommand.cpp
+        room-editor/commands/removeitemcommand.h room-editor/commands/removeitemcommand.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -134,3 +134,34 @@ void MainWindow::on_pushButton_clicked()
         sceneObjectsMenu_->show();
 }
 
+
+void MainWindow::on_actionOpen_triggered()
+{
+
+}
+
+
+void MainWindow::on_actionUndo_triggered()
+{
+    if (auto roomEditor = dynamic_cast<RoomEditor*>(ui->tabWidget->currentWidget()))
+    {
+        QUndoStack* undoStack = roomEditor->getScene()->undoStack();
+        if (undoStack->canUndo())
+        {
+            undoStack->undo();
+        }
+    }
+}
+
+void MainWindow::on_actionRedo_triggered()
+{
+    if (auto roomEditor = dynamic_cast<RoomEditor*>(ui->tabWidget->currentWidget()))
+    {
+        QUndoStack* undoStack = roomEditor->getScene()->undoStack();
+        if (undoStack->canRedo())
+        {
+            undoStack->redo();
+        }
+    }
+}
+

@@ -18,6 +18,7 @@ void InteractingGrid::setUpGridPoints(qreal lineSize, qreal dotSize)
         {
 
             GridPoint* point = new GridPoint(row * lineSize - (dotSize / 2.0), col * lineSize - (dotSize / 2.0), dotSize);
+            point->setZValue(100);
             scene_->addItem(point);
 
             rowPoints.append(point);

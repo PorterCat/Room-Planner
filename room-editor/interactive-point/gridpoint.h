@@ -17,7 +17,7 @@ class GridPoint : public QGraphicsEllipseItem
 
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override
 	{
-		setBrush(QBrush(QColor(0, 0, 230, 0)));
+		setBrush(transparentBrush_);
 		QGraphicsEllipseItem::hoverLeaveEvent(event);
 	}
 
@@ -25,6 +25,9 @@ class GridPoint : public QGraphicsEllipseItem
 	{
 		setAcceptHoverEvents(choice);
 	}
+
+	void colorIt() { setBrush(brush_); }
+	void transparentIt() { setBrush(transparentBrush_); }
 
 	QPointF getRealPoint() { return QPointF{ x_, y_ }; }
 	qreal getX() { return x_; }
@@ -39,6 +42,8 @@ class GridPoint : public QGraphicsEllipseItem
 	}
 
   private:
+	const QBrush transparentBrush_ = QBrush(QColor(0, 0, 230, 0));
+
 	QBrush brush_;
 	qreal x_;
 	qreal y_;

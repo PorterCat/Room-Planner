@@ -41,6 +41,12 @@ class MainWindow : public QMainWindow
 
     void on_pushButton_clicked();
 
+    void on_actionOpen_triggered();
+
+    void on_actionUndo_triggered();
+
+    void on_actionRedo_triggered();
+
 private:
 	Ui::MainWindow *ui;
     SceneObjectsMenu* sceneObjectsMenu_;
