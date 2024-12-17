@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "tools/itool.h"
+#include "widgets/sceneobjectsmenu.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -38,8 +39,11 @@ class MainWindow : public QMainWindow
 
     void on_actionClose_All_triggered();
 
+    void on_pushButton_clicked();
+
 private:
 	Ui::MainWindow *ui;
+    SceneObjectsMenu* sceneObjectsMenu_;
 	ITool* currentTool_;
 };
 #endif // MAINWINDOW_H

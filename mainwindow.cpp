@@ -10,75 +10,82 @@
 #include "widgets/newproject_inputdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
-	: QMainWindow(parent), ui(new Ui::MainWindow)
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-	ui->setupUi(this);
-	ui->centralwidget->setLayout(ui->gridLayout);
+    ui->setupUi(this);
+    ui->centralwidget->setLayout(ui->centralLayout);
 
-	QActionGroup *actionGroup = new QActionGroup(this);
-	actionGroup->setExclusive(true);
-	actionGroup->addAction(ui->actionWallTool);
-	actionGroup->addAction(ui->actionDragTool);
+    ui->buttonLayout->addStretch();
+    ui->buttonLayout->addWidget(ui->pushButton);
+
+    QActionGroup *actionGroup = new QActionGroup(this);
+    actionGroup->setExclusive(true);
+    actionGroup->addAction(ui->actionWallTool);
+    actionGroup->addAction(ui->actionDragTool);
     actionGroup->addAction(ui->actionCursorTool);
 
-	ui->actionDragTool->setChecked(true);
-	setCurrentTool(new DragTool());
+    sceneObjectsMenu_ = new SceneObjectsMenu(this);
+    sceneObjectsMenu_->setGeometry(50, 50, 300, 400);
+    sceneObjectsMenu_->hide();
+
+    ui->actionDragTool->setChecked(true);
+    setCurrentTool(new DragTool());
 
     // add there brush and other things
 
     ui->generalTools->setStyleSheet(
         "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }"
-    );
+        );
     ui->buildTools->setStyleSheet(
         "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }"
-    );
+        );
 }
 
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-	ui->tabWidget->removeTab(index);
+    ui->tabWidget->removeTab(index);
 }
 
 void MainWindow::on_actionNew_Project_triggered()
 {
-	NewProjectInputDialog dialog(this);
-	if (dialog.exec() == QDialog::Accepted) 
-	{
-		RoomEditor* tab = new RoomEditor(dialog.getWidthValue(), dialog.getLengthValue(), ui->tabWidget, this);
-		tab->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding));
-		ui->tabWidget->setCurrentIndex(ui->tabWidget->addTab(tab, dialog.getFileNameValue()));
-	}
+    NewProjectInputDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        RoomEditor* tab = new RoomEditor(dialog.getWidthValue(), dialog.getLengthValue(), ui->tabWidget, this);
+        tab->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding));
+        ui->tabWidget->setCurrentIndex(ui->tabWidget->addTab(tab, dialog.getFileNameValue()));
+    }
 }
 
 void MainWindow::setCurrentTool(ITool* tool)
 {
-	currentTool_ = tool;
-	emit currentToolChanged(currentTool_);
+    currentTool_ = tool;
+    emit currentToolChanged(currentTool_);
 }
 
 // Turn tools into list
 
 void MainWindow::on_actionDragTool_toggled(bool arg1)
 {
-	if(arg1)
-	{
-		setCurrentTool(new DragTool());
-		return;
-	}
-	QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
-	for (RoomEditor* editor : roomEditors)
-		editor->setDragMode(false);
+    if(arg1)
+    {
+        setCurrentTool(new DragTool());
+        return;
+    }
+    QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+    for (RoomEditor* editor : roomEditors)
+        editor->setDragMode(false);
 }
 
 void MainWindow::on_actionWallTool_toggled(bool arg1)
 {
-	if(arg1)
-	{
-		setCurrentTool(new WallTool());
-		return;
-	}
+    if(arg1)
+    {
+        setCurrentTool(new WallTool());
+        return;
+    }
 }
 
 
@@ -98,8 +105,8 @@ void MainWindow::on_actionClose_All_triggered()
         if (currentWidget)
         {
             QMessageBox::StandardButton reply = QMessageBox::warning(this, tr("Unsaved Changes"),
-                                            tr("You have unsaved changes. Do you want to save them?"),
-                                            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+                                                                     tr("You have unsaved changes. Do you want to save them?"),
+                                                                     QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
             if (reply == QMessageBox::Save) {
                 //saveAsTriggered;
             }
@@ -107,5 +114,13 @@ void MainWindow::on_actionClose_All_triggered()
                 return;
         }
     }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    if(sceneObjectsMenu_->isVisible())
+        sceneObjectsMenu_->hide();
+    else
+        sceneObjectsMenu_->show();
 }
 

@@ -34,8 +34,8 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindo
 	zoomLabel->hide();
 
 	infoLabel = new PopupLabel(this, 1000);
-	infoLabel->setStyleSheet("background-color: rgba(0, 0, 0, 128); color: blue; padding: 5px;");
-	infoLabel->setAlignment(Qt::AlignBottom);
+    infoLabel->setStyleSheet("background-color: rgba(0, 0, 0, 128); color: white; padding: 5px;");
+    infoLabel->setAlignment(Qt::AlignCenter);
 	infoLabel->hide();
 
 	connect(view, &ZoomableGraphicsView::zoomChanged, this, &RoomEditor::onZoomChanged);
@@ -70,13 +70,9 @@ void RoomEditor::drawGrid()
 	QPen dotsPen(QColor(0, 0, 230, 255));
 
 	for (int i = 0; i <= gridWidth_; ++i)
-	{
 		scene->addLine(i * LineSize, 0, i * LineSize, gridHeight_ * LineSize, linesPen);
-	}
 	for (int i = 0; i <= gridHeight_; ++i)
-	{
 		scene->addLine(0, i * LineSize, gridWidth_ * LineSize, i * LineSize, linesPen);
-	}
 
 	for (int x = 0; x < gridWidth_ + 1; ++x)
 	{

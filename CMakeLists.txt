@@ -14,7 +14,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
+
         mainwindow.h
         mainwindow.ui
 )
@@ -40,6 +40,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         room-editor/SceneObjects/rewindow.h room-editor/SceneObjects/rewindow.cpp
         room-editor/SceneObjects/redoor.h room-editor/SceneObjects/redoor.cpp
         widgets/newproject_inputdialog.h widgets/newproject_inputdialog.cpp
+
+        mainwindow.cpp
+        widgets/sceneobjectsmenu.h widgets/sceneobjectsmenu.cpp widgets/sceneobjectsmenu.ui
 
     )
 # Define target properties for Android with Qt 6 as:
