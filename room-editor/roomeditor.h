@@ -15,6 +15,7 @@
 #include "popuplabel.h"
 #include "zoomablegraphicsview.h"
 #include "tools/itool.h"
+#include "interactive-point/interactinggrid.h"
 
 class RoomEditor : public QWidget
 {
@@ -22,11 +23,20 @@ class RoomEditor : public QWidget
 
   public:
 	explicit RoomEditor(int gridWidth, int gridHeight, QWidget *parent = nullptr, MainWindow* mainWindow = nullptr);
-	void setGridSize(int width, int height);
 	~RoomEditor();
 
+	//tools
 	void setCurrentTool(ITool* tool) {currentTool_ = tool; }
 	void setDragMode(bool);
+	void setSelectPointsMode(bool);
+
+	ITool* getCurrentTool() { return currentTool_; }
+
+	void writeInfoLabel(const QString);
+	void writeErrorLabel(const QString);
+
+	QGraphicsScene* getScene() { return scene_; }
+	ZoomableGraphicsView* getView() { return view_; }
 
   protected:
 	void mouseMoveEvent(QMouseEvent* event) override;
@@ -34,14 +44,13 @@ class RoomEditor : public QWidget
 	void mousePressEvent(QMouseEvent* event) override;
 
   private:
-	QGraphicsScene *scene;
-	ZoomableGraphicsView *view;
-	int gridWidth_;
-	int gridHeight_;
+	QGraphicsScene *scene_;
+	ZoomableGraphicsView *view_;
 	ITool *currentTool_;
 
 	void drawGrid();
 
+	//information 
 	PopupLabel *zoomLabel;
 	PopupLabel *infoLabel;
 	PopupLabel *errorLabel;
@@ -50,6 +59,9 @@ class RoomEditor : public QWidget
 	void setZoomLevel(int zoomPercentage);
 
 	MainWindow* mainWindow_;
+
+	InteractingGrid* interactingGrid_;
+	bool isPointsInteracting_;
 
   private slots:
 	void onZoomChanged();

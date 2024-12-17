@@ -1,45 +1,75 @@
 #include "walltool.h"
 
-WallTool::WallTool() {}
-
-void WallTool::mouseMoveEvent(QMouseEvent* event, RoomEditor* sender)
-{
-	// QPointF scenePos = scene_->views().first()->mapToScene(event->pos());
-
-	// if (!previewWall_) {
-	// 	previewWall_ = new QGraphicsRectItem(-25, -25, 50, 50);
-	// 	previewWall_->setPen(QPen(Qt::black, 2));
-	// 	previewWall_->setBrush(QBrush(Qt::lightGray, Qt::Dense4Pattern));
-	// 	scene_->addItem(previewWall_);
-	// }
-
-	// previewWall_->setPos(scenePos.x() - 25, scenePos.y() - 25);
-}
-
-void WallTool::mousePressEvent(QMouseEvent* event, RoomEditor* sender)
-{
-	// if (event->button() == Qt::LeftButton) {
-	// 	QPointF scenePos = scene_->views().first()->mapToScene(event->pos());
-
-	// 		   // Создаем новый квадрат и добавляем его на сцену
-	// 	QGraphicsRectItem* square = new QGraphicsRectItem(scenePos.x() - 25, scenePos.y() - 25, 50, 50);
-	// 	square->setPen(QPen(Qt::black, 2));
-	// 	square->setBrush(QBrush(Qt::lightGray));
-	// 	scene_->addItem(square);
-
-	// 		   // Удаляем предпоказ
-	// 	if (previewWall_) {
-	// 		scene_->removeItem(previewWall_);
-	// 		delete previewWall_;
-	// 		previewWall_ = nullptr;
-	// 	}
-	// }
-}
-
-void WallTool::mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender)
+WallTool::WallTool() :
+	isDrawingWall_(false), previewWall_(nullptr), distanceText_(nullptr), startPoint_(nullptr)
 {
 
 }
+
+void WallTool::mouseMoveEvent(QMouseEvent* event, QWidget* sender)
+{
+	if (auto view = dynamic_cast<ZoomableGraphicsView*>(sender))
+	{
+		if (isDrawingWall_)
+		{
+			if (previewWall_)
+			{
+				view->scene()->removeItem(previewWall_);
+				delete previewWall_;
+				previewWall_ = nullptr;
+			}
+
+			if (distanceText_)
+			{
+				view->scene()->removeItem(distanceText_);
+				delete distanceText_;
+				distanceText_ = nullptr;
+			}
+
+			QGraphicsItem* item = view->scene()->itemAt(view->mapToScene(event->pos()), QTransform());
+			if (auto gridPoint = dynamic_cast<GridPoint*>(item))
+			{
+				previewWall_ = new QGraphicsLineItem(startPoint_->getX() + startPoint_->getSize()/2, 
+					startPoint_->getY() + startPoint_->getSize() / 2,
+					gridPoint->getX() + startPoint_->getSize() / 2, gridPoint->getY() + gridPoint->getSize() / 2);
+				previewWall_->setPen(QPen(Qt::gray, 5));
+				view->scene()->addItem(previewWall_);
+
+				qreal distance = GridPoint::calculateDistance(startPoint_, gridPoint);
+				distanceText_ = new QGraphicsTextItem(QString::number(distance, 'f', 2) + " m");
+				distanceText_->setDefaultTextColor(Qt::gray);
+				distanceText_->setPos(gridPoint->getX(), gridPoint->getY() - 20);
+				view->scene()->addItem(distanceText_);
+			}
+		}
+	}
+}
+
+void WallTool::mousePressEvent(QMouseEvent* event, QWidget* sender)
+{
+	if (auto view = dynamic_cast<ZoomableGraphicsView*>(sender))
+	{
+		QGraphicsItem* item = view->scene()->itemAt(view->mapToScene(event->pos()), QTransform());
+		if (auto gridPoint = dynamic_cast<GridPoint*>(item))
+		{
+			if (isDrawingWall_ && startPoint_ != nullptr)
+			{
+				previewWall_ = new QGraphicsLineItem(startPoint_->getX(), startPoint_->getY(), gridPoint->getX(), gridPoint->getY());
+				previewWall_->setPen(QPen(Qt::gray, 5));
+				view->scene()->addItem(previewWall_);
+				isDrawingWall_ = false;
+			}
+			else
+			{
+				gridPoint->hoverMode(false);
+				startPoint_ = gridPoint;
+				isDrawingWall_ = true;
+			}
+		}
+	}
+}
+
+void WallTool::mouseReleaseEvent(QMouseEvent* event, QWidget* sender) {}
 
 WallTool::~WallTool()
 {

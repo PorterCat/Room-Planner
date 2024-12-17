@@ -35,6 +35,13 @@ class PopupLabel : public QLabel
 		timer->start();
 	}
 
+	void showWithTimer(int interval)
+	{
+		timer->setInterval(interval);
+		this->show();
+		timer->start();
+	}
+
   private:
 	QTimer *timer;
 };

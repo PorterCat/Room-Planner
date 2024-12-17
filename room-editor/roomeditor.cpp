@@ -2,86 +2,77 @@
 
 #include <QActionGroup>
 #include <QGraphicsLineItem>
+#include <QObject>
 
 #include "mainwindow.h"
-#include "room-editor/InteractivePoint/gridpoint.h"
+#include "room-editor/interactive-point/gridpoint.h"
 #include "tools/dragtool.h"
 #include "tools/walltool.h"
 
+constexpr qreal LineSize = 25.0;
+
+constexpr qreal DotSize = LineSize / 2.0;
+
+constexpr int LineBrightness = 64;
+
 RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindow* mainWindow)
-	: QWidget(parent), gridWidth_(gridWidth), gridHeight_(gridHeight), mainWindow_(mainWindow)
+	: QWidget(parent), scene_(new QGraphicsScene(this)), mainWindow_(mainWindow)
 {
-	scene = new QGraphicsScene(this);
-	scene->setBackgroundBrush(Qt::white);
+	scene_->setBackgroundBrush(Qt::white);
 	// scene->setSceneRect(0, 0, 1000, 1000); For more space and better dragging mode to do
-	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+	scene_->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-	view = new ZoomableGraphicsView(scene, this);
-	view->setMouseTracking(true);
+	view_ = new ZoomableGraphicsView(scene_, currentTool_, this);
+	view_->setMouseTracking(true);
+	//setMouseTracking(true);
 
-	view->setRenderHint(QPainter::Antialiasing);
-	view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+	view_->setRenderHint(QPainter::Antialiasing);
+	view_->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
-	view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	view_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	view_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	setLayout(new QVBoxLayout);
-	layout()->addWidget(view);
+	layout()->addWidget(view_);
 
 	zoomLabel = new PopupLabel(this, 1000);
 	zoomLabel->setStyleSheet("background-color: rgba(0, 0, 0, 128); color: white; padding: 5px;");
 	zoomLabel->setAlignment(Qt::AlignCenter);
 	zoomLabel->hide();
+	zoomLabel->move(10, 10);
 
 	infoLabel = new PopupLabel(this, 1000);
     infoLabel->setStyleSheet("background-color: rgba(0, 0, 0, 128); color: white; padding: 5px;");
     infoLabel->setAlignment(Qt::AlignCenter);
 	infoLabel->hide();
+	infoLabel->move(10, 50);
 
-	connect(view, &ZoomableGraphicsView::zoomChanged, this, &RoomEditor::onZoomChanged);
+	connect(view_, &ZoomableGraphicsView::zoomChanged, this, &RoomEditor::onZoomChanged);
 	connect(zoomLabel, &PopupLabel::clicked, this, &RoomEditor::onZoomLabelClicked);
 	connect(mainWindow_, &MainWindow::currentToolChanged, this, &RoomEditor::onCurrentToolChanged);
 
+	interactingGrid_ = new InteractingGrid(scene_, gridWidth, gridHeight);
+
 	currentTool_ = mainWindow->currentTool();
-	if(dynamic_cast<DragTool*>(currentTool_))
+	if (dynamic_cast<DragTool*>(currentTool_))
 		setDragMode(true);
+	view_->setCurrentTool(currentTool_);
+
 	this->drawGrid();
-}
-
-constexpr double LineSize = 25.0;
-
-constexpr double DotSize = LineSize / 3.0;
-constexpr double HalfDotSize = DotSize / 2.0;
-
-constexpr int LineBrightness = 64;
-
-void RoomEditor::setGridSize(int width, int height)
-{
-	gridWidth_ = width;
-	gridHeight_ = height;
-	drawGrid();
 }
 
 void RoomEditor::drawGrid()
 {
-	scene->clear();
+	scene_->clear();
 
 	QPen linesPen(QColor(LineBrightness, LineBrightness, LineBrightness, 100));
-	QPen dotsPen(QColor(0, 0, 230, 255));
 
-	for (int i = 0; i <= gridWidth_; ++i)
-		scene->addLine(i * LineSize, 0, i * LineSize, gridHeight_ * LineSize, linesPen);
-	for (int i = 0; i <= gridHeight_; ++i)
-		scene->addLine(0, i * LineSize, gridWidth_ * LineSize, i * LineSize, linesPen);
+	for (int i = 0; i <= interactingGrid_->getWidth(); ++i)
+		scene_->addLine(i * LineSize, 0, i * LineSize, interactingGrid_->getHeight() * LineSize, linesPen);
+	for (int i = 0; i <= interactingGrid_->getHeight(); ++i)
+		scene_->addLine(0, i * LineSize, interactingGrid_->getWidth() * LineSize, i * LineSize, linesPen);
 
-	for (int x = 0; x < gridWidth_ + 1; ++x)
-	{
-		for (int y = 0; y < gridHeight_ + 1; ++y)
-		{
-			GridPoint* point = new GridPoint(x * LineSize - HalfDotSize, y * LineSize - HalfDotSize, DotSize);
-			scene->addItem(point);
-		}
-	}
+	interactingGrid_->setUpGridPoints(LineSize, DotSize);
 }
 
 #pragma region ZoomView
@@ -89,13 +80,13 @@ void RoomEditor::drawGrid()
 void RoomEditor::setZoomLevel(int zoomPercentage)
 {
 	qreal scaleFactor = zoomPercentage / 100.0;
-	view->setZoomLevel(scaleFactor);
+	view_->setZoomLevel(scaleFactor);
 	showZoomLevel();
 }
 
 void RoomEditor::showZoomLevel()
 {
-	qreal scaleFactor = view->transform().m11();
+	qreal scaleFactor = view_->transform().m11();
 	int zoomPercentage = qRound(scaleFactor * 100);
 	zoomLabel->setText(QString("Zoom: %1%").arg(zoomPercentage));
 	zoomLabel->adjustSize();
@@ -118,35 +109,60 @@ void RoomEditor::onZoomChanged() { showZoomLevel(); }
 
 #pragma region Tools
 
-void RoomEditor::mouseMoveEvent(QMouseEvent* event) { currentTool_->mouseMoveEvent(event, this); }
+void RoomEditor::mouseMoveEvent(QMouseEvent* event) 
+{ 
+	currentTool_->mouseMoveEvent(event, this); 
+}
 
-void RoomEditor::mousePressEvent(QMouseEvent* event) { currentTool_->mousePressEvent(event, this); }
+void RoomEditor::mousePressEvent(QMouseEvent* event) 
+{ 
+	currentTool_->mousePressEvent(event, this); 
+}
 
-void RoomEditor::mouseReleaseEvent(QMouseEvent* event) { currentTool_->mouseReleaseEvent(event, this); }
+void RoomEditor::mouseReleaseEvent(QMouseEvent* event) 
+{ 
+	currentTool_->mouseReleaseEvent(event, this); 
+}
 
 void RoomEditor::setDragMode(bool choice)
 {
-	if (choice) view->setDragMode(QGraphicsView::ScrollHandDrag);
-	else view->setDragMode(QGraphicsView::NoDrag);
+	if (choice) view_->setDragMode(QGraphicsView::ScrollHandDrag);
+	else view_->setDragMode(QGraphicsView::NoDrag);
+}
+
+void RoomEditor::setSelectPointsMode(bool choice) 
+{ 
+	isPointsInteracting_ = choice; 
+	interactingGrid_->setInteractive(choice);
+}
+
+// Problems with timer duration: I made it custom but I considered it nowhere
+void RoomEditor::writeInfoLabel(const QString string)
+{
+	infoLabel->setText(string);
+	infoLabel->adjustSize();
+	infoLabel->showWithTimer();
+}
+
+// Complete it
+void RoomEditor::writeErrorLabel(const QString)
+{
+	errorLabel->adjustSize();
 }
 
 void RoomEditor::onCurrentToolChanged(ITool* newTool)
 {
 	currentTool_ = newTool;
+	view_->setCurrentTool(newTool);
 
 	if (dynamic_cast<WallTool*>(newTool))
 	{
-		infoLabel->setText("Стены");
+		writeInfoLabel("Стены");
 	}
 	else if (dynamic_cast<DragTool*>(newTool))
 	{
-		infoLabel->setText("Перетаскивание");
-		setDragMode(true);
+		writeInfoLabel("Перетаскивание");
 	}
-
-	infoLabel->adjustSize();
-	infoLabel->move(10, 50);
-	infoLabel->showWithTimer();
 }
 
 #pragma endregion

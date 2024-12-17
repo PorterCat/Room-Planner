@@ -17,9 +17,10 @@ class ZoomableGraphicsView : public QGraphicsView
 	Q_OBJECT
 
   public:
-	ZoomableGraphicsView(QGraphicsScene* scene, QWidget* parent = nullptr)
-		: QGraphicsView(scene, parent), currentScale(1.0) // Инициализируем масштаб как 100%
+    ZoomableGraphicsView(QGraphicsScene* scene_, ITool* tool, QWidget* parent = nullptr)
+		: QGraphicsView(scene_, parent), currentScale(1.0), currentTool_(tool)
 	{
+        this->setMouseTracking(true);
 	}
 
 	void setZoomLevel(double scaleFactor)
@@ -30,6 +31,11 @@ class ZoomableGraphicsView : public QGraphicsView
 		currentScale = scaleFactor;
 		setTransform(QTransform::fromScale(currentScale, currentScale));
 		emit zoomChanged();
+	}
+
+	void setCurrentTool(ITool* tool)
+	{
+		currentTool_ = tool;
 	}
 
   protected:
@@ -56,12 +62,32 @@ class ZoomableGraphicsView : public QGraphicsView
 		event->accept();
 	}
 
+	void mouseMoveEvent(QMouseEvent* event) override 
+	{
+		currentTool_->mouseMoveEvent(event, this);
+		QGraphicsView::mouseMoveEvent(event);
+	}
+
+	void mousePressEvent(QMouseEvent* event) override 
+	{
+		currentTool_->mousePressEvent(event, this);
+		QGraphicsView::mousePressEvent(event);
+	}
+
+	void mouseReleaseEvent(QMouseEvent* event) override 
+	{
+		currentTool_->mouseReleaseEvent(event, this);
+		QGraphicsView::mouseReleaseEvent(event);
+	}
+
   signals:
 	void zoomChanged();
 
   private:
 	double currentScale;
 	static constexpr double maxScale = 5.0;
+
+	ITool* currentTool_;
 };
 
 #endif // ZOOMABLEGRAPHICSVIEW_H

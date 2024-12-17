@@ -20,7 +20,6 @@ protected:
     void mousePressEvent(QMouseEvent *event) override {
         QWidget *child = childAt(event->pos());
         if (!child || child == this) {
-            // Если нажатие произошло на пустое место или на рамку, начинаем перетаскивание
             if (event->button() == Qt::LeftButton) {
                 dragPosition = event->globalPos() - frameGeometry().topLeft();
                 event->accept();

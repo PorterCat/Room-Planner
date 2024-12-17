@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->buttonLayout->addStretch();
     ui->buttonLayout->addWidget(ui->pushButton);
 
+
+    //Remember: every action there should switch currentTool_ !!!
     QActionGroup *actionGroup = new QActionGroup(this);
     actionGroup->setExclusive(true);
     actionGroup->addAction(ui->actionWallTool);
@@ -31,20 +33,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->actionDragTool->setChecked(true);
     setCurrentTool(new DragTool());
 
-    // add there brush and other things
 
+    // Just for highlight the selected option in toolBoxes
     ui->generalTools->setStyleSheet(
-        "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }"
-        );
+        "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }");
     ui->buildTools->setStyleSheet(
-        "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }"
-        );
+        "QToolButton:checked { background-color: lightgray; border: 1px solid gray; }");
 }
 
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
+    //TO DO: add there maybesave? option
     ui->tabWidget->removeTab(index);
 }
 
@@ -71,7 +72,10 @@ void MainWindow::on_actionDragTool_toggled(bool arg1)
 {
     if(arg1)
     {
-        setCurrentTool(new DragTool());
+        this->setCurrentTool(new DragTool());
+        QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+        for (RoomEditor* editor : roomEditors)
+            editor->setDragMode(true);
         return;
     }
     QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
@@ -83,15 +87,21 @@ void MainWindow::on_actionWallTool_toggled(bool arg1)
 {
     if(arg1)
     {
-        setCurrentTool(new WallTool());
+        this->setCurrentTool(new WallTool());
+        QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+        for (RoomEditor* editor : roomEditors)
+            editor->setSelectPointsMode(true);
         return;
     }
+    QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+    for (RoomEditor* editor : roomEditors)
+        editor->setSelectPointsMode(false);
 }
 
 
 void MainWindow::on_actionClose_Tab_triggered()
 {
-    //TO DO: add there maybesave? options
+    //TO DO: add there maybesave? option
     ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabWidget->currentWidget()));
 }
 
@@ -105,8 +115,8 @@ void MainWindow::on_actionClose_All_triggered()
         if (currentWidget)
         {
             QMessageBox::StandardButton reply = QMessageBox::warning(this, tr("Unsaved Changes"),
-                                                                     tr("You have unsaved changes. Do you want to save them?"),
-                                                                     QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+                tr("You have unsaved changes. Do you want to save them?"),
+                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
             if (reply == QMessageBox::Save) {
                 //saveAsTriggered;
             }

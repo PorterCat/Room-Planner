@@ -11,9 +11,9 @@ class DragTool : public ITool
   public:
 	DragTool();
 	~DragTool();
-	void mousePressEvent(QMouseEvent* event, RoomEditor* sender) override;
-	void mouseMoveEvent(QMouseEvent* event, RoomEditor* sender) override;
-	void mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender) override;
+	void mousePressEvent(QMouseEvent* event, QWidget* sender) override;
+	void mouseMoveEvent(QMouseEvent* event, QWidget* sender) override;
+	void mouseReleaseEvent(QMouseEvent* event, QWidget* sender) override;
 };
 
 #endif // DRAGTOOL_H

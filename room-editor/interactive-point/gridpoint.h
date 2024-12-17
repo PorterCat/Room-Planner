@@ -1,4 +1,4 @@
-#ifndef GRIDPOINT_H
+﻿#ifndef GRIDPOINT_H
 #define GRIDPOINT_H
 
 #include <QGraphicsEllipseItem>
@@ -21,8 +21,28 @@ class GridPoint : public QGraphicsEllipseItem
 		QGraphicsEllipseItem::hoverLeaveEvent(event);
 	}
 
+	void hoverMode(bool choice)
+	{
+		setAcceptHoverEvents(choice);
+	}
+
+	QPointF getRealPoint() { return QPointF{ x_, y_ }; }
+	qreal getX() { return x_; }
+	qreal getY() { return y_; }
+	qreal getSize() { return size_; }
+
+	static qreal calculateDistance(GridPoint* start, GridPoint* end)
+	{
+		qreal dx = end->getX() - start->getX();
+		qreal dy = end->getY() - start->getY();
+		return qSqrt(dx * dx + dy * dy);
+	}
+
   private:
 	QBrush brush_;
+	qreal x_;
+	qreal y_;
+	qreal size_;
 };
 
 #endif // GRIDPOINT_H

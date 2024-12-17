@@ -13,9 +13,9 @@ class ITool : public QObject
 	Q_OBJECT
   public:
 	virtual ~ITool() {}
-	virtual void mousePressEvent(QMouseEvent* event, RoomEditor* sender) = 0;
-	virtual void mouseMoveEvent(QMouseEvent* event, RoomEditor* sender) = 0;
-	virtual void mouseReleaseEvent(QMouseEvent* event, RoomEditor* sender) = 0;
+	virtual void mousePressEvent(QMouseEvent* event, QWidget* sender) = 0;
+	virtual void mouseMoveEvent(QMouseEvent* event, QWidget* sender) = 0;
+	virtual void mouseReleaseEvent(QMouseEvent* event, QWidget* sender) = 0;
 };
 
 #endif // ITOOL_H
