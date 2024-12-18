@@ -20,7 +20,7 @@ public:
         json["y1"] = line().y1();
         json["x2"] = line().x2();
         json["y2"] = line().y2();
-        json["color"] = pen().color().name();
+
         return json;
     }
 
@@ -30,9 +30,8 @@ public:
         qreal y1 = json["y1"].toDouble();
         qreal x2 = json["x2"].toDouble();
         qreal y2 = json["y2"].toDouble();
-        QColor color(json["color"].toString());
 
-        return new REWall(x1, y1, x2, y2, color);
+        return new REWall(x1, y1, x2, y2);
     }
 };
 

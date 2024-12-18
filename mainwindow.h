@@ -23,6 +23,8 @@ class MainWindow : public QMainWindow
 	void setCurrentTool(ITool* tool);
 	ITool* currentTool() const { return currentTool_; }
 
+	bool isTabSelected();
+
   signals:
 	void currentToolChanged(ITool* newTool);
 
@@ -50,6 +52,10 @@ class MainWindow : public QMainWindow
     void on_actionRedo_triggered();
 
     void on_actionDeleteTool_toggled(bool arg1);
+
+	void on_actionCursorTool_toggled(bool arg1);
+
+    bool on_actionSave_As_triggered();
 
 private:
 	Ui::MainWindow *ui;

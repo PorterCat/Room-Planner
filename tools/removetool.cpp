@@ -1,6 +1,7 @@
 #include "removetool.h"
 
 #include "room-editor/scene-objects/iroomeditorobject.h"
+#include "room-editor/zoomablegraphicsview.h"
 
 RemoveTool::RemoveTool() {}
 

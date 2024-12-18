@@ -1,10 +1,11 @@
 ﻿#include "sceneserializer.h"
+#include <qfileinfo.h>
 
-bool SceneSerializer::saveScene(QGraphicsScene* scene, const QString& filePath)
+bool SceneSerializer::saveScene(RoomEditor* roomEditor, const QString& filePath)
 {
     QJsonArray itemsArray;
 
-    foreach(QGraphicsItem * item, scene->items())
+    foreach(QGraphicsItem * item, roomEditor->getScene()->items())
     {
         if (auto roomEditorObject = dynamic_cast<IRoomEditorObject*>(item))
         {
@@ -14,6 +15,14 @@ bool SceneSerializer::saveScene(QGraphicsScene* scene, const QString& filePath)
 
     QJsonObject sceneObject;
     sceneObject["items"] = itemsArray;
+
+    QJsonObject gridSize;
+    gridSize["width"] = roomEditor->getGridWidth();
+    gridSize["height"] = roomEditor->getGridHeight();
+    sceneObject["gridSize"] = gridSize;
+
+    QFileInfo fileInfo(filePath);
+    sceneObject["fileName"] = fileInfo.baseName();
 
     QJsonDocument jsonDoc(sceneObject);
     QFile file(filePath);
@@ -26,8 +35,9 @@ bool SceneSerializer::saveScene(QGraphicsScene* scene, const QString& filePath)
     return false;
 }
 
-bool SceneSerializer::loadScene(QGraphicsScene* scene, const QString& filePath)
+RoomEditor* SceneSerializer::loadScene(const QString& filePath, QWidget* parent, MainWindow* mainWindow)
 {
+    RoomEditor* roomEditor;
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly))
     {
@@ -36,20 +46,32 @@ bool SceneSerializer::loadScene(QGraphicsScene* scene, const QString& filePath)
 
         QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
         QJsonObject sceneObject = jsonDoc.object();
+        QString fileName = "untitled";
+
+        if(sceneObject.contains("fileName"))
+        {
+           fileName = sceneObject["fileName"].toString();
+        }
+
+        if (sceneObject.contains("gridSize"))
+        {
+            QJsonObject gridSize = sceneObject["gridSize"].toObject();
+            int gridWidth = gridSize["width"].toInt();
+            int gridHeight = gridSize["height"].toInt();
+            roomEditor = new RoomEditor(gridWidth, gridHeight, fileName, parent, mainWindow);
+        }
+
         QJsonArray itemsArray = sceneObject["items"].toArray();
-
-        scene->clear();
-
         foreach(const QJsonValue & value, itemsArray)
         {
             QJsonObject itemObject = value.toObject();
             IRoomEditorObject* item = IRoomEditorObject::fromJson(itemObject);
             if (item)
             {
-                scene->addItem(dynamic_cast<QGraphicsItem*>(item));
+                roomEditor->getScene()->addItem(dynamic_cast<QGraphicsItem*>(item));
             }
         }
-        return true;
+        return roomEditor;
     }
-    return false;
+    return nullptr;
 }

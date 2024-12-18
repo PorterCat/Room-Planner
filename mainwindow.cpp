@@ -8,8 +8,11 @@
 
 #include <QActionGroup>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "widgets/newproject_inputdialog.h"
+
+#include <room-editor/sceneserializer.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -51,6 +54,17 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() { delete ui; }
 
+bool MainWindow::isTabSelected()
+{
+    int currentIndex = ui->tabWidget->currentIndex();
+    if (currentIndex == -1)
+    {
+        QMessageBox::information(this, tr("No Tab Selected"), tr("No tab is selected."));
+        return false;
+    }
+    return true;
+}
+
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     //TO DO: add there maybesave? option
@@ -62,7 +76,7 @@ void MainWindow::on_actionNew_Project_triggered()
     NewProjectInputDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted)
     {
-        RoomEditor* tab = new RoomEditor(dialog.getWidthValue(), dialog.getLengthValue(), ui->tabWidget, this);
+        RoomEditor* tab = new RoomEditor(dialog.getWidthValue(), dialog.getLengthValue(), dialog.getFileNameValue(), ui->tabWidget, this);
         tab->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding));
         ui->tabWidget->setCurrentIndex(ui->tabWidget->addTab(tab, dialog.getFileNameValue()));
     }
@@ -118,11 +132,6 @@ void MainWindow::on_pushButton_clicked()
         sceneObjectsMenu_->hide();
     else
         sceneObjectsMenu_->show();
-}
-
-void MainWindow::on_actionOpen_triggered()
-{
-
 }
 
 void MainWindow::on_actionUndo_triggered()
@@ -199,3 +208,49 @@ void MainWindow::on_actionCursorTool_toggled(bool arg1)
 #pragma endregion
 
 
+
+bool MainWindow::on_actionSave_As_triggered()
+{
+    if (!isTabSelected()) return false;
+
+    QString filePath;
+    RoomEditor* roomEditor = dynamic_cast<RoomEditor*>(ui->tabWidget->currentWidget());
+
+    if (roomEditor)
+    {
+        filePath = QFileDialog::getSaveFileName(this, tr("Save File"), roomEditor->getFileName(), tr("Files (*.json)"));
+
+        if (!filePath.isEmpty())
+        {
+            if (roomEditor->saveScene(filePath))
+            {
+                ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), QFileInfo(filePath).fileName());
+                return true;
+            }
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this, tr("Unsupported Widget"), tr("The current widget does not support saving."));
+    }
+
+    return false;
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("All (*json)"));
+    if (filePath.isEmpty())
+    {
+        QMessageBox::information(this, tr("No File Selected"), tr("No file was selected."));
+        return;
+    }
+
+    RoomEditor* roomEditor = SceneSerializer::loadScene(filePath, ui->tabWidget, this);
+
+    if(roomEditor)
+    {
+        roomEditor->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding));
+        ui->tabWidget->setCurrentIndex(ui->tabWidget->addTab(roomEditor, roomEditor->getFileName()));
+    }
+}

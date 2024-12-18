@@ -18,14 +18,13 @@
 #include "tools/itool.h"
 #include "interactive-point/interactinggrid.h"
 #include "room-editor//scene-objects/iroomeditorobject.h"
-#include "sceneserializer.h"
 
 class RoomEditor : public QWidget
 {
 	Q_OBJECT
 
   public:
-	explicit RoomEditor(int gridWidth, int gridHeight, QWidget *parent = nullptr, MainWindow* mainWindow = nullptr);
+    explicit RoomEditor(int gridWidth, int gridHeight, QString fileName, QWidget *parent = nullptr, MainWindow* mainWindow = nullptr);
 	~RoomEditor();
 
 	//tools
@@ -41,15 +40,16 @@ class RoomEditor : public QWidget
     ActionGraphicsScene* getScene() { return scene_; }
 	ZoomableGraphicsView* getView() { return view_; }
 
-	bool saveScene(const QString& filePath) 
-	{
-		return SceneSerializer::saveScene(scene_, filePath);
-	}
+	int getGridWidth() { return gridWidth_;  }
+	int getGridHeight() { return gridHeight_; }
+    QString getFileName() { return fileName_; }
 
-	bool loadScene(const QString& filePath) 
-	{
-		return SceneSerializer::loadScene(scene_, filePath);
-	}
+	void setGridWidth(int value) { gridWidth_ = value; }
+	void setGridHeight(int value) { gridHeight_ = value; }
+
+    bool saveScene(const QString& filePath);
+
+	void drawGrid();
 
   protected:
 	void mouseMoveEvent(QMouseEvent* event) override;
@@ -59,9 +59,11 @@ class RoomEditor : public QWidget
   private:
     ActionGraphicsScene *scene_;
 	ZoomableGraphicsView *view_;
-	ITool *currentTool_;
+	int gridWidth_;
+	int gridHeight_;
+    QString fileName_;
 
-	void drawGrid();
+	ITool *currentTool_;
 
 	//information 
 	PopupLabel *zoomLabel;

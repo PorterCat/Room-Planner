@@ -8,14 +8,17 @@
 #include "tools/dragtool.h"
 #include "tools/walltool.h"
 
+#include "sceneserializer.h"
+
 constexpr qreal LineSize = 25.0;
 
 constexpr qreal DotSize = LineSize / 2.0;
 
 constexpr int LineBrightness = 64;
 
-RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindow* mainWindow)
-    : QWidget(parent), scene_(new ActionGraphicsScene(this)), mainWindow_(mainWindow)
+RoomEditor::RoomEditor(int gridWidth, int gridHeight, QString fileName, QWidget *parent, MainWindow* mainWindow)
+    : QWidget(parent), scene_(new ActionGraphicsScene(this)), mainWindow_(mainWindow), gridWidth_(gridWidth), gridHeight_(gridHeight),
+    fileName_(fileName)
 {
 	scene_->setBackgroundBrush(Qt::white);
 	// scene->setSceneRect(0, 0, 1000, 1000); For more space and better dragging mode to do
@@ -58,6 +61,11 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QWidget *parent, MainWindo
 	view_->setCurrentTool(currentTool_);
 
 	this->drawGrid();
+}
+
+bool RoomEditor::saveScene(const QString& filePath)
+{
+    return SceneSerializer::saveScene(this, filePath);
 }
 
 void RoomEditor::drawGrid()

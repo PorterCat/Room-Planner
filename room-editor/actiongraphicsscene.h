@@ -12,7 +12,7 @@ class ActionGraphicsScene : public QGraphicsScene
 public:
     explicit ActionGraphicsScene(QObject *parent = nullptr)
         : QGraphicsScene(parent), undoStack_(new QUndoStack(this)) {}
-
+        
     void addItemWithUndo(QGraphicsItem* item)
     {
         undoStack_->push(new AddItemCommand(this, item));
