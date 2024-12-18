@@ -12,16 +12,20 @@
 #include <QTimer>
 #include <QTransform>
 
+#include "actiongraphicsscene.h"
+
 class ZoomableGraphicsView : public QGraphicsView
 {
 	Q_OBJECT
 
   public:
-    ZoomableGraphicsView(QGraphicsScene* scene_, ITool* tool, QWidget* parent = nullptr)
-		: QGraphicsView(scene_, parent), currentScale(1.0), currentTool_(tool)
+    ZoomableGraphicsView(ActionGraphicsScene* scene, ITool* tool, QWidget* parent = nullptr)
+		: QGraphicsView(scene, parent), currentScale(1.0), currentTool_(tool), scene_(scene)
 	{
         this->setMouseTracking(true);
 	}
+
+	ActionGraphicsScene* scene() const { return scene_; }
 
 	void setZoomLevel(double scaleFactor)
 	{
@@ -86,6 +90,8 @@ class ZoomableGraphicsView : public QGraphicsView
   private:
 	double currentScale;
 	static constexpr double maxScale = 5.0;
+
+	ActionGraphicsScene* scene_;
 
 	ITool* currentTool_;
 };

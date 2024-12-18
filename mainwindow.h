@@ -27,6 +27,8 @@ class MainWindow : public QMainWindow
 	void currentToolChanged(ITool* newTool);
 
   private slots:
+    void setCursorForAction();
+
 	void on_tabWidget_tabCloseRequested(int index);
 
 	void on_actionNew_Project_triggered();
@@ -46,6 +48,8 @@ class MainWindow : public QMainWindow
     void on_actionUndo_triggered();
 
     void on_actionRedo_triggered();
+
+    void on_actionDeleteTool_toggled(bool arg1);
 
 private:
 	Ui::MainWindow *ui;

@@ -1,6 +1,8 @@
 #include "mainwindow.h"
+#include "tools/cursortool.h"
 #include "tools/dragtool.h"
 #include "tools/walltool.h"
+#include "tools/removeTool.h"
 #include "ui_mainwindow.h"
 #include "room-editor/roomeditor.h"
 
@@ -25,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     actionGroup->addAction(ui->actionWallTool);
     actionGroup->addAction(ui->actionDragTool);
     actionGroup->addAction(ui->actionCursorTool);
+    actionGroup->addAction(ui->actionDeleteTool);
 
     sceneObjectsMenu_ = new SceneObjectsMenu(this);
     sceneObjectsMenu_->setGeometry(50, 50, 300, 400);
@@ -32,6 +35,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->actionDragTool->setChecked(true);
     setCurrentTool(new DragTool());
+
+
+    // Changing cursor Update: left it for good days
+    // connect(ui->actionCursorTool, &QAction::triggered, this, &MainWindow::setCursorForAction);
+    // connect(ui->actionDeleteTool, &QAction::triggered, this, &MainWindow::setCursorForAction);
 
 
     // Just for highlight the selected option in toolBoxes
@@ -66,38 +74,16 @@ void MainWindow::setCurrentTool(ITool* tool)
     emit currentToolChanged(currentTool_);
 }
 
-// Turn tools into list
-
-void MainWindow::on_actionDragTool_toggled(bool arg1)
+void MainWindow::setCursorForAction() //works good but pictures are awful))
 {
-    if(arg1)
+    QAction* action = qobject_cast<QAction*>(sender());
+    if (action)
     {
-        this->setCurrentTool(new DragTool());
-        QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
-        for (RoomEditor* editor : roomEditors)
-            editor->setDragMode(true);
-        return;
+        QPixmap pixmap = action->icon().pixmap(QSize(32, 32));
+        QCursor cursor(pixmap);
+        setCursor(cursor);
     }
-    QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
-    for (RoomEditor* editor : roomEditors)
-        editor->setDragMode(false);
 }
-
-void MainWindow::on_actionWallTool_toggled(bool arg1)
-{
-    if(arg1)
-    {
-        this->setCurrentTool(new WallTool());
-        QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
-        for (RoomEditor* editor : roomEditors)
-            editor->setSelectPointsMode(true);
-        return;
-    }
-    QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
-    for (RoomEditor* editor : roomEditors)
-        editor->setSelectPointsMode(false);
-}
-
 
 void MainWindow::on_actionClose_Tab_triggered()
 {
@@ -134,12 +120,10 @@ void MainWindow::on_pushButton_clicked()
         sceneObjectsMenu_->show();
 }
 
-
 void MainWindow::on_actionOpen_triggered()
 {
 
 }
-
 
 void MainWindow::on_actionUndo_triggered()
 {
@@ -147,9 +131,7 @@ void MainWindow::on_actionUndo_triggered()
     {
         QUndoStack* undoStack = roomEditor->getScene()->undoStack();
         if (undoStack->canUndo())
-        {
             undoStack->undo();
-        }
     }
 }
 
@@ -159,9 +141,61 @@ void MainWindow::on_actionRedo_triggered()
     {
         QUndoStack* undoStack = roomEditor->getScene()->undoStack();
         if (undoStack->canRedo())
-        {
             undoStack->redo();
-        }
     }
 }
+
+#pragma region Tools
+
+void MainWindow::on_actionDragTool_toggled(bool arg1)
+{
+    if (arg1) // What happens when you click on new tool
+    {
+        this->setCurrentTool(new DragTool());
+        QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+        for (RoomEditor* editor : roomEditors)
+            editor->setDragMode(true);
+        return;
+    }
+    //What happens when you select another tool
+    QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+    for (RoomEditor* editor : roomEditors)
+        editor->setDragMode(false);
+}
+
+void MainWindow::on_actionWallTool_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        this->setCurrentTool(new WallTool());
+        QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+        for (RoomEditor* editor : roomEditors)
+            editor->setSelectPointsMode(true);
+        return;
+    }
+    QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+    for (RoomEditor* editor : roomEditors)
+        editor->setSelectPointsMode(false);
+}
+
+void MainWindow::on_actionDeleteTool_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        this->setCurrentTool(new RemoveTool());
+        return;
+    }
+}
+
+void MainWindow::on_actionCursorTool_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        this->setCurrentTool(new CursorTool());
+        return;
+    }
+}
+
+#pragma endregion
+
 

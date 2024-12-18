@@ -28,12 +28,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         room-editor/zoomablegraphicsview.h
         room-editor/roomeditor.h                        room-editor/roomeditor.cpp
         room-editor/popuplabel.h                        room-editor/popuplabel.cpp
+        room-editor/sceneserializer.h                   room-editor/sceneserializer.cpp
         room-editor/interactive-point/gridpoint.h       room-editor/interactive-point/gridpoint.cpp
         room-editor/interactive-point/interactinggrid.h room-editor/interactive-point/interactinggrid.cpp
-        room-editor/scene-objects/roomeditorobject.h
+        room-editor/scene-objects/iroomeditorobject.h
         room-editor/scene-objects/rewall.h              room-editor/scene-objects/rewall.cpp
-        room-editor/scene-objects/rewindow.h            room-editor/scene-objects/rewindow.cpp
-        room-editor/scene-objects/redoor.h              room-editor/scene-objects/redoor.cpp
         
         tools/itool.h
         tools/walltool.h tools/walltool.cpp
@@ -45,6 +44,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         room-editor/commands/graphicsscenecommand.h
         room-editor/commands/additemcommand.h room-editor/commands/additemcommand.cpp
         room-editor/commands/removeitemcommand.h room-editor/commands/removeitemcommand.cpp
+        room-editor/scene-objects/iroomeditorobject.cpp
+        tools/removetool.h tools/removetool.cpp
+        tools/cursortool.h tools/cursortool.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

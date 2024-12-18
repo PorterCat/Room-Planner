@@ -17,7 +17,8 @@
 #include "zoomablegraphicsview.h"
 #include "tools/itool.h"
 #include "interactive-point/interactinggrid.h"
-#include "room-editor//scene-objects/roomeditorobject.h"
+#include "room-editor//scene-objects/iroomeditorobject.h"
+#include "sceneserializer.h"
 
 class RoomEditor : public QWidget
 {
@@ -39,6 +40,16 @@ class RoomEditor : public QWidget
 
     ActionGraphicsScene* getScene() { return scene_; }
 	ZoomableGraphicsView* getView() { return view_; }
+
+	bool saveScene(const QString& filePath) 
+	{
+		return SceneSerializer::saveScene(scene_, filePath);
+	}
+
+	bool loadScene(const QString& filePath) 
+	{
+		return SceneSerializer::loadScene(scene_, filePath);
+	}
 
   protected:
 	void mouseMoveEvent(QMouseEvent* event) override;
@@ -64,7 +75,7 @@ class RoomEditor : public QWidget
 
 	InteractingGrid* interactingGrid_;
 
-	QVector<RoomEditorObject*> roomEditorObjects;
+	QVector<IRoomEditorObject*> roomEditorObjects;
 
   private slots:
 	void onZoomChanged();

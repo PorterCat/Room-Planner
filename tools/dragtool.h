@@ -2,7 +2,6 @@
 #define DRAGTOOL_H
 
 #include "itool.h"
-#include "room-editor/roomeditor.h"
 
 // Why I need this class at all?
 

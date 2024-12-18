@@ -1,5 +1,7 @@
 #include "walltool.h"
 
+#include "room-editor/scene-objects/rewall.h"
+
 WallTool::WallTool() :
 	isDrawingWall_(false), previewWall_(nullptr), distanceText_(nullptr), startPoint_(nullptr)
 {
@@ -57,7 +59,26 @@ void WallTool::mousePressEvent(QMouseEvent* event, QWidget* sender)
 			{
 				startPoint_->hoverMode(true);
 				startPoint_->transparentIt();
+
 				isDrawingWall_ = false;
+
+				view->scene()->addItemWithUndo(new REWall(startPoint_->getX() + startPoint_->getSize() / 2,
+					startPoint_->getY() + startPoint_->getSize() / 2,
+					gridPoint->getX() + startPoint_->getSize() / 2, gridPoint->getY() + gridPoint->getSize() / 2));
+
+				if (previewWall_)
+				{
+					view->scene()->removeItem(previewWall_);
+					delete previewWall_;
+					previewWall_ = nullptr;
+				}
+
+				if (distanceText_)
+				{
+					view->scene()->removeItem(distanceText_);
+					delete distanceText_;
+					distanceText_ = nullptr;
+				}
 			}
 			else
 			{

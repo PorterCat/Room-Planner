@@ -5,7 +5,6 @@
 #include <QObject>
 
 #include "mainwindow.h"
-#include "room-editor/interactive-point/gridpoint.h"
 #include "tools/dragtool.h"
 #include "tools/walltool.h"
 

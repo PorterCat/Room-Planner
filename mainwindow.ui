@@ -115,6 +115,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionCursorTool"/>
+   <addaction name="actionDeleteTool"/>
    <addaction name="actionDragTool"/>
   </widget>
   <widget class="QToolBar" name="buildTools">
@@ -228,7 +229,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/toolsIcons/images/cursor.png</normaloff>:/toolsIcons/images/cursor.png</iconset>
+     <normaloff>:/toolsIcons/images/cursor2.png</normaloff>:/toolsIcons/images/cursor2.png</iconset>
    </property>
    <property name="text">
     <string>CursorTool</string>
@@ -256,6 +257,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionDeleteTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/toolsIcons/images/deleteCursor.png</normaloff>:/toolsIcons/images/deleteCursor.png</iconset>
+   </property>
+   <property name="text">
+    <string>DeleteTool</string>
    </property>
   </action>
  </widget>
