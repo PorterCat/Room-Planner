@@ -57,6 +57,8 @@ class MainWindow : public QMainWindow
 
     bool on_actionSave_As_triggered();
 
+    void on_actionDoorTool_toggled(bool arg1);
+
 private:
 	Ui::MainWindow *ui;
     SceneObjectsMenu* sceneObjectsMenu_;

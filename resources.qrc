@@ -33,6 +33,9 @@
         <file>images/firewall.png</file>
         <file>images/cursor2.png</file>
         <file>images/deleteCursor.png</file>
+        <file>images/opened-door-aperture.png</file>
+        <file>images/window.png</file>
+        <file>images/ruler.png</file>
     </qresource>
     <qresource prefix="/styles">
         <file>styles/toolbar.qss</file>

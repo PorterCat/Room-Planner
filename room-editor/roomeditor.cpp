@@ -142,6 +142,12 @@ void RoomEditor::setSelectPointsMode(bool choice)
 	interactingGrid_->setInteractive(choice);
 }
 
+void RoomEditor::setPointsHidden(bool choice)
+{
+	if (choice) interactingGrid_->hide();
+	interactingGrid_->show();
+}
+
 // Problems with timer duration: I made it custom but I considered it nowhere
 void RoomEditor::writeInfoLabel(const QString string)
 {

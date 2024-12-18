@@ -16,14 +16,11 @@ class WallTool : public ITool
 	void mouseReleaseEvent(QMouseEvent* event, QWidget* sender) override;
 
   private:
-	// QGraphicsScene *scene_;
 	QGraphicsLineItem *previewWall_;
 	QGraphicsTextItem *distanceText_;
 
 	GridPoint *startPoint_;
 	bool isDrawingWall_;
-
-	//QPointF snapToGrid(const QPointF &point);
 };
 
 #endif // WALLTOOL_H

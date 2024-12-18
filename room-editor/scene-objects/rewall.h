@@ -12,6 +12,11 @@ public:
     int type() const override { return REWallType; }
     QString typeName() const override { return "REWall"; }
 
+    qreal get_x1() {return line().x1();}
+    qreal get_x2() {return line().x2();}
+    qreal get_y1() {return line().y1();}
+    qreal get_y2() {return line().y2();}
+
     QJsonObject toJson() const override
     {
         QJsonObject json;

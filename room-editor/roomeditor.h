@@ -31,6 +31,7 @@ class RoomEditor : public QWidget
 	void setCurrentTool(ITool* tool) {currentTool_ = tool; }
 	void setDragMode(bool);
 	void setSelectPointsMode(bool);
+	void setPointsHidden(bool);
 
 	ITool* getCurrentTool() { return currentTool_; }
 

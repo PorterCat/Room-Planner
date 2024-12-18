@@ -13,6 +13,26 @@ public:
 
 	GridPoint* getPoint(int row, int col) const;
 	void setInteractive(bool interactive);
+	
+	void hide()
+	{
+		for (const auto& row : _grid)
+			for (GridPoint* point : row)
+			{
+				point->hide();
+				point->setZValue(0);
+			}
+	}
+
+	void show()
+	{
+		for (const auto& row : _grid)
+			for (GridPoint* point : row)
+			{
+				point->show();
+				point->setZValue(100);
+			}
+	}
 
 	int getWidth() { return gridWidth_; }
 	int getHeight() { return gridHeight_; }

@@ -47,6 +47,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         room-editor/scene-objects/iroomeditorobject.cpp
         tools/removetool.h tools/removetool.cpp
         tools/cursortool.h tools/cursortool.cpp
+        room-editor/scene-objects/redoor.h room-editor/scene-objects/redoor.cpp
+        tools/doortool.h tools/doortool.cpp
+        tools/ikeytool.h
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -13,6 +13,7 @@
 #include <QTransform>
 
 #include "actiongraphicsscene.h"
+#include <tools/ikeytool.h>
 
 class ZoomableGraphicsView : public QGraphicsView
 {
@@ -68,20 +69,47 @@ class ZoomableGraphicsView : public QGraphicsView
 
 	void mouseMoveEvent(QMouseEvent* event) override 
 	{
-		currentTool_->mouseMoveEvent(event, this);
+		if (auto tool = dynamic_cast<ITool*>(currentTool_))
+		{
+			tool->mouseMoveEvent(event, this);
+		}
 		QGraphicsView::mouseMoveEvent(event);
 	}
 
 	void mousePressEvent(QMouseEvent* event) override 
 	{
-		currentTool_->mousePressEvent(event, this);
+		if (auto tool = dynamic_cast<ITool*>(currentTool_))
+		{
+			tool->mousePressEvent(event, this);
+		}
 		QGraphicsView::mousePressEvent(event);
 	}
 
 	void mouseReleaseEvent(QMouseEvent* event) override 
 	{
-		currentTool_->mouseReleaseEvent(event, this);
+		if (auto tool = dynamic_cast<ITool*>(currentTool_))
+		{
+			tool->mouseReleaseEvent(event, this);
+		}
 		QGraphicsView::mouseReleaseEvent(event);
+	}
+
+	void keyPressEvent(QKeyEvent* event) override
+	{
+		if (auto tool = dynamic_cast<IKeyTool*>(currentTool_))
+		{
+			tool->keyPressEvent(event, this);
+		}
+		QGraphicsView::keyPressEvent(event);
+	}
+
+	void keyReleaseEvent(QKeyEvent* event) override
+	{
+		if (auto tool = dynamic_cast<IKeyTool*>(currentTool_))
+		{
+			tool->keyReleaseEvent(event, this);
+		}
+		QGraphicsView::keyReleaseEvent(event);
 	}
 
   signals:

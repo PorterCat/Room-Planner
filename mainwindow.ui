@@ -129,6 +129,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionWallTool"/>
+   <addaction name="actionDoorTool"/>
   </widget>
   <action name="actionNew_Project">
    <property name="checkable">
@@ -269,6 +270,18 @@
    </property>
    <property name="text">
     <string>DeleteTool</string>
+   </property>
+  </action>
+  <action name="actionDoorTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/toolsIcons/images/opened-door-aperture.png</normaloff>:/toolsIcons/images/opened-door-aperture.png</iconset>
+   </property>
+   <property name="text">
+    <string>DoorTool</string>
    </property>
   </action>
  </widget>

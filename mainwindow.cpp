@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "tools/cursortool.h"
+#include "tools/doortool.h"
 #include "tools/dragtool.h"
 #include "tools/walltool.h"
 #include "tools/removeTool.h"
@@ -31,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     actionGroup->addAction(ui->actionDragTool);
     actionGroup->addAction(ui->actionCursorTool);
     actionGroup->addAction(ui->actionDeleteTool);
+    actionGroup->addAction(ui->actionDoorTool);
 
     sceneObjectsMenu_ = new SceneObjectsMenu(this);
     sceneObjectsMenu_->setGeometry(50, 50, 300, 400);
@@ -179,12 +181,18 @@ void MainWindow::on_actionWallTool_toggled(bool arg1)
         this->setCurrentTool(new WallTool());
         QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
         for (RoomEditor* editor : roomEditors)
+        {
             editor->setSelectPointsMode(true);
+            editor->setPointsHidden(false);
+        }
         return;
     }
     QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
     for (RoomEditor* editor : roomEditors)
+    {
         editor->setSelectPointsMode(false);
+        editor->setPointsHidden(true);
+    }
 }
 
 void MainWindow::on_actionDeleteTool_toggled(bool arg1)
@@ -201,6 +209,15 @@ void MainWindow::on_actionCursorTool_toggled(bool arg1)
     if (arg1)
     {
         this->setCurrentTool(new CursorTool());
+        return;
+    }
+}
+
+void MainWindow::on_actionDoorTool_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        this->setCurrentTool(new DoorTool());
         return;
     }
 }
@@ -254,3 +271,4 @@ void MainWindow::on_actionOpen_triggered()
         ui->tabWidget->setCurrentIndex(ui->tabWidget->addTab(roomEditor, roomEditor->getFileName()));
     }
 }
+
