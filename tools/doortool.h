@@ -18,9 +18,10 @@ public:
     void keyReleaseEvent(QKeyEvent* event, QWidget* sender) override;
 
 private:
-    REDoor *previewDoor_;
+    QGraphicsRectItem* previewDoor_;
     QGraphicsLineItem* previewLine_;
     bool perpendicularDirectionRight_;
+    bool doorDirectionRight_;
 };
 
 #endif // DOORTOOL_H

@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "mainwindow.h"
+#include "room-editor/scene-objects/refurniture.h"
 #include "tools/dragtool.h"
 #include "tools/walltool.h"
 
@@ -61,6 +62,8 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QString fileName, QWidget 
 	view_->setCurrentTool(currentTool_);
 
 	this->drawGrid();
+
+    scene_->addItem(new REFurniture(":/reFurniture/images/REFurniture/chair.png", 0, 0));
 }
 
 bool RoomEditor::saveScene(const QString& filePath)
@@ -145,7 +148,7 @@ void RoomEditor::setSelectPointsMode(bool choice)
 void RoomEditor::setPointsHidden(bool choice)
 {
 	if (choice) interactingGrid_->hide();
-	interactingGrid_->show();
+	else interactingGrid_->show();
 }
 
 // Problems with timer duration: I made it custom but I considered it nowhere
@@ -167,6 +170,7 @@ void RoomEditor::onCurrentToolChanged(ITool* newTool)
 	currentTool_ = newTool;
 	view_->setCurrentTool(newTool);
 
+	//Changing tools event
 	if (dynamic_cast<WallTool*>(newTool))
 	{
 		writeInfoLabel("Стены");

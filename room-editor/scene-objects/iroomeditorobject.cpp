@@ -1,5 +1,6 @@
 #include "iroomeditorobject.h"
 #include "rewall.h"
+#include "refurniture.h"
 
 IRoomEditorObject* IRoomEditorObject::fromJson(const QJsonObject& json)
 {
@@ -12,6 +13,10 @@ IRoomEditorObject* IRoomEditorObject::createFromType(const QString& type, const 
     if (type == "REWall")
     {
         return REWall::fromJson(json);
+    }
+    else if (type == "REFurniture")
+    {
+        return REFurniture::fromJson(json);
     }
     return nullptr;
 }

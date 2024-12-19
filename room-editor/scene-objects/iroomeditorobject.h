@@ -12,7 +12,8 @@ class IRoomEditorObject
       {
           RoomEditorObjectBase = QGraphicsItem::UserType + 1,
           REWallType,
-          REDoorType
+          REDoorType,
+          REFurnitureType
       };
 	
       virtual ~IRoomEditorObject() = default;

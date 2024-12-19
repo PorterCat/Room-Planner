@@ -40,4 +40,8 @@
     <qresource prefix="/styles">
         <file>styles/toolbar.qss</file>
     </qresource>
+    <qresource prefix="/reFurniture">
+        <file>images/REFurniture/chair.png</file>
+        <file>images/REFurniture/rounded-table.png</file>
+    </qresource>
 </RCC>

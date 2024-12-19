@@ -8,6 +8,17 @@ WallTool::WallTool() :
 
 }
 
+WallTool::~WallTool()
+{
+	if (startPoint_)
+	{
+		startPoint_->hoverMode(true);
+		startPoint_->transparentIt();
+	}
+	if (previewWall_)
+		delete previewWall_;
+}
+
 void WallTool::mouseMoveEvent(QMouseEvent* event, QWidget* sender)
 {
 	if (auto view = dynamic_cast<ZoomableGraphicsView*>(sender))
@@ -91,9 +102,3 @@ void WallTool::mousePressEvent(QMouseEvent* event, QWidget* sender)
 }
 
 void WallTool::mouseReleaseEvent(QMouseEvent* event, QWidget* sender) {}
-
-WallTool::~WallTool()
-{
-	if (previewWall_)
-		delete previewWall_;
-}
