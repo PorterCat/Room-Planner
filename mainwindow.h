@@ -23,6 +23,8 @@ class MainWindow : public QMainWindow
 	void setCurrentTool(ITool* tool);
 	ITool* currentTool() const { return currentTool_; }
 
+	QWidget* getCurrentWidget();
+
 	bool isTabSelected();
 
   signals:

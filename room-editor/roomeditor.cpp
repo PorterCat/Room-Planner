@@ -63,7 +63,7 @@ RoomEditor::RoomEditor(int gridWidth, int gridHeight, QString fileName, QWidget 
 
 	this->drawGrid();
 
-    scene_->addItem(new REFurniture(":/reFurniture/images/REFurniture/chair.png", 0, 0));
+    //scene_->addItem(new REFurniture(":/reFurniture/images/REFurniture/chair.png", 0, 0));
 }
 
 bool RoomEditor::saveScene(const QString& filePath)

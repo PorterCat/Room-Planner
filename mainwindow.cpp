@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "tools/cursortool.h"
 #include "tools/doortool.h"
 #include "tools/dragtool.h"
@@ -34,9 +34,33 @@ MainWindow::MainWindow(QWidget *parent)
     actionGroup->addAction(ui->actionDeleteTool);
     actionGroup->addAction(ui->actionDoorTool);
 
-    sceneObjectsMenu_ = new SceneObjectsMenu(this);
-    sceneObjectsMenu_->setGeometry(50, 50, 300, 400);
-    sceneObjectsMenu_->hide();
+    QSharedPointer<FurnitureDatabase> db = 
+        QSharedPointer<FurnitureDatabase>::create
+        ("C:/Users/PorterCat/Development/Room-Planner/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/furniture.db");
+    if (db->open())
+    {
+        db->createTables();
+        if (!db->categoryExists("Kitchen"))
+            db->addCategory("Kitchen");
+
+        if (!db->categoryExists("Bedroom"))
+            db->addCategory("Bedroom");
+
+        int kitchenId = db->getCategoryIdByName("Kitchen");
+        if (kitchenId != -1)
+        {
+            if (!db->furnitureExists("Chair"))
+                db->addFurniture("Chair", ":/reFurniture/images/REFurniture/chair.png", kitchenId);
+
+            if (!db->furnitureExists("Rounded Table"))
+                db->addFurniture("Rounded Table", ":/reFurniture/images/REFurniture/rounded-table.png", kitchenId);
+        }
+
+        sceneObjectsMenu_ = new SceneObjectsMenu(db, this);
+        sceneObjectsMenu_->setGeometry(50, 50, 300, 400);
+        sceneObjectsMenu_->hide();
+        sceneObjectsMenu_->loadFurnitureByCategory("Kitchen");
+    }
 
     ui->actionDragTool->setChecked(true);
     setCurrentTool(new DragTool());
@@ -55,6 +79,11 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+QWidget* MainWindow::getCurrentWidget()
+{
+    return ui->tabWidget->currentWidget();
+}
 
 bool MainWindow::isTabSelected()
 {
@@ -210,6 +239,14 @@ void MainWindow::on_actionCursorTool_toggled(bool arg1)
     {
         this->setCurrentTool(new CursorTool());
         return;
+    }
+    QList<RoomEditor*> roomEditors = ui->tabWidget->findChildren<RoomEditor*>();
+    for (RoomEditor* editor : roomEditors)
+    {
+        for (QGraphicsItem* item : editor->getScene()->items())
+        {
+            item->setSelected(false);
+        }
     }
 }
 

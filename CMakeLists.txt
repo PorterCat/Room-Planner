@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Sql)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -52,6 +53,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         tools/ikeytool.h
         room-editor/scene-objects/refurniture.h room-editor/scene-objects/refurniture.cpp
         widgets/furnitureeditor.h widgets/furnitureeditor.cpp
+
+        room-editor/furniture-db/furnituredatabase.h room-editor/furniture-db/furnituredatabase.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -100,3 +103,4 @@ if(QT_VERSION_MAJOR EQUAL 6)
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Gui Qt6::Sql)

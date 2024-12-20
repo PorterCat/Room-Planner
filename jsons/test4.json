@@ -1,0 +1,92 @@
+{
+    "fileName": "test4",
+    "gridSize": {
+        "height": 24,
+        "width": 24
+    },
+    "items": [
+        {
+            "type": "REWall",
+            "x1": 350,
+            "x2": 350,
+            "y1": 225,
+            "y2": 300
+        },
+        {
+            "type": "REWall",
+            "x1": 225,
+            "x2": 225,
+            "y1": 225,
+            "y2": 125
+        },
+        {
+            "height": 512,
+            "imagePath": ":/reFurniture/images/REFurniture/chair.png",
+            "rotation": 360,
+            "scale": 0.1,
+            "type": "REFurniture",
+            "width": 512,
+            "x": 54.654309873068684,
+            "y": -198.1445358232371
+        },
+        {
+            "type": "REWall",
+            "x1": 350,
+            "x2": 225,
+            "y1": 125,
+            "y2": 125
+        },
+        {
+            "type": "REWall",
+            "x1": 75,
+            "x2": 350,
+            "y1": 25,
+            "y2": 25
+        },
+        {
+            "type": "REWall",
+            "x1": 350,
+            "x2": 75,
+            "y1": 300,
+            "y2": 300
+        },
+        {
+            "type": "REWall",
+            "x1": 225,
+            "x2": 350,
+            "y1": 225,
+            "y2": 225
+        },
+        {
+            "type": "REWall",
+            "x1": 75,
+            "x2": 75,
+            "y1": 25,
+            "y2": 300
+        },
+        {
+            "type": "REWall",
+            "x1": 350,
+            "x2": 350,
+            "y1": 25,
+            "y2": 125
+        },
+        {
+            "type": "REWall",
+            "x1": 225,
+            "x2": 225,
+            "y1": 25,
+            "y2": 125
+        },
+        {
+            "height": 512,
+            "imagePath": ":/reFurniture/images/REFurniture/rounded-table.png",
+            "rotation": 0,
+            "scale": 0.1,
+            "type": "REFurniture",
+            "width": 512,
+            "x": 54.23278770653161,
+            "y": -152.58716541159748
+        }
+    ]
+}

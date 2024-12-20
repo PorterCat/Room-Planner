@@ -11,6 +11,7 @@ class REFurniture : public QGraphicsPixmapItem, public virtual IRoomEditorObject
 {
 public:
     REFurniture(const QString& imagePath, qreal x, qreal y, QGraphicsItem* parent = nullptr);
+    ~REFurniture();
 
     qreal getScale() const { return scale(); }
     qreal getRotation() const { return rotation(); }
@@ -33,9 +34,16 @@ private:
 
     QGraphicsProxyWidget* m_sizeSliderProxy = nullptr;
     QGraphicsProxyWidget* m_rotationSliderProxy = nullptr;
+    QGraphicsProxyWidget* m_sizeLabelProxy = nullptr;
+    QGraphicsProxyWidget* m_rotationLabelProxy = nullptr;
+
+    QObject* m_signalHandler = nullptr;
 
     void createSliders();
     void removeSliders();
+    void updateSlidersPosition();
+    void onSizeChanged(int value);
+    void onRotationChanged(int value);
 };
 
 #endif // REFURNITURE_H

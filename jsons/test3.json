@@ -1,0 +1,61 @@
+{
+    "fileName": "test3",
+    "gridSize": {
+        "height": 24,
+        "width": 24
+    },
+    "items": [
+        {
+            "height": 512,
+            "imagePath": ":/reFurniture/images/REFurniture/chair.png",
+            "rotation": 0,
+            "scale": 0.2,
+            "type": "REFurniture",
+            "width": 512,
+            "x": -170.45970020908607,
+            "y": -167.79969139619712
+        },
+        {
+            "type": "REWall",
+            "x1": 25,
+            "x2": 225,
+            "y1": 375,
+            "y2": 375
+        },
+        {
+            "type": "REWall",
+            "x1": 425,
+            "x2": 425,
+            "y1": 150,
+            "y2": 25
+        },
+        {
+            "type": "REWall",
+            "x1": 25,
+            "x2": 25,
+            "y1": 25,
+            "y2": 375
+        },
+        {
+            "type": "REWall",
+            "x1": 25,
+            "x2": 425,
+            "y1": 25,
+            "y2": 25
+        },
+        {
+            "type": "REWall",
+            "x1": 225,
+            "x2": 425,
+            "y1": 150,
+            "y2": 150
+        },
+        {
+            "type": "REWall",
+            "x1": 225,
+            "x2": 225,
+            "y1": 375,
+            "y2": 150
+        }
+    ]
+}
